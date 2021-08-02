@@ -6,7 +6,7 @@ from app.health.forms import DayForm
 from flask import render_template, request, Response
 from flask_login import login_required
 from datetime import datetime
-from sqlalchemy import extract, and_
+from sqlalchemy import extract, and_, func
 import re
 import io
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -32,10 +32,24 @@ def graph(host):
         form.day.default = datetime.now().day
         form.process()
     current = db.session.query(Health).filter(Health.host==host).order_by(Health.id.desc()).first()
-    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current)
+    count = db.session.query(Health).filter(and_(
+                Health.host == host,
+                extract('year', Health.received) == year,
+                extract('month', Health.received) == month,
+                extract('day', Health.received) == day
+            )).count()
+    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current, count=count)
 
 @bp.route("/<int:host>/<int:year>/<int:month>/<int:day>/<param>.png")
 def draw(host, year, month, day, param):
+    def bool_to_int(b):
+        if b is not None:
+            if b:
+                return 1
+            else:
+                return 0
+        return 0
+
     preset = {
         'internet':  { 'color': 'red',   'title': 'Интернет', 'ylabel': 'Потери, %'},
         'vpn':       { 'color': 'red',   'title': 'VPN',      'ylabel': 'Потери, %'},
@@ -76,11 +90,14 @@ def draw(host, year, month, day, param):
         axis_p = fig.add_subplot(4, 1, 4)
         axis_p.set(title='Принтер', ylim=[0, 1], yticks=[], xticks=[], aspect=0.02)
         xs = [s.received for s in stat]
-        ys = [1 for s in stat if not getattr(s, 'validator')]
-        axis_c.plot(xs, ys, color='red')
-        axis_v.plot(xs, ys, color='red')
-        axis_n.plot(xs, ys, color='red')
-        axis_p.plot(xs, ys, color='red')
+        ys_c = [bool_to_int(getattr(s, 'coin')) for s in stat]
+        ys_v = [bool_to_int(getattr(s, 'validator')) for s in stat]
+        ys_n = [bool_to_int(getattr(s, 'nfc')) for s in stat]
+        ys_p = [bool_to_int(getattr(s, 'printer')) for s in stat]
+        axis_c.plot(xs, ys_c, color='red')
+        axis_v.plot(xs, ys_v, color='red')
+        axis_n.plot(xs, ys_n, color='red')
+        axis_p.plot(xs, ys_p, color='red')
 
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)

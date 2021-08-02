@@ -34,7 +34,7 @@
                 <th></th>
             </thead>
             <tbody>
-            {% set ns = namespace(uptime=0, reboots=0) %}
+            {% set ns = namespace(reboots = 0, uptime = 0) %}
             {% for i in health %}
                 <tr>
                     <td>{{ i.received }}</td>
@@ -54,9 +54,9 @@
                         <td>{{ i.uptime }}</td>
                     {% else %}
                         <td class="bg-primary">{{ i.uptime }}</td>
+                        {% set ns.reboots = ns.reboots + 1 %}
                     {% endif %}
                     {% set ns.uptime = i.uptime %}
-                    {% set ns.reboots =+ 1 %}
 
                     {% if i.internet == 0 %}
                         <td class="bg-success">{{ i.internet }}</td>
@@ -75,7 +75,7 @@
                     {% endif %}
 
 {# Если "отпал" жесткий диск - все значения будут False. #}
-                    {% if i.cpu %} <td>{{ i.cpu }}</td> {% else %} <td class="bg-warning"> - </td> {% endif %}
+                    <td>{{ i.cpu }}</td>
                     {% if i.ram %} <td>{{ i.ram }}</td> {% else %} <td class="bg-warning"> - </td> {% endif %}
                     {% if i.hdd %} <td>{{ i.hdd }}</td> {% else %} <td class="bg-warning"> - </td> {% endif %}
 

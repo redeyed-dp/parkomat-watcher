@@ -3,7 +3,7 @@
 {% block app_content %}
 <div class="row-fluid">
     <div class="col-12 p-4">
-        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+        <a class="btn btn-sm btn-light" href="{{ url_for('catalog.index') }}">
             <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
         </a>
     </div>
@@ -16,57 +16,83 @@
 </div>
 
 <div class="row">
-    <div class="col-6 border border-dark">
-        <h3>Последние показатели</h3>
+    <div class="col-6 border">
+        <div class="row">
+            <div class="col-12 text-center"><h3>Последние показатели</h3></div>
+        </div>
+
+        <p>Снято {{ current.probed }}</p>
+        <p>Отправлено {{ current.received }}</p>
+
         <h4 class="p-2">Периферия USB</h4>
         <div class="row">
-            <div class="col-3">
+            {% if current.coin %} {% set bgcoin = '' %} {% else %} {% set bgcoin = 'bg-danger' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bgcoin }}">
                 <img src="{{ url_for('static', filename='img/coin.png') }}"><br>
-                Монетоприемник <br>
+                Монетоприемник
             </div>
-            <div class="col-3">
+
+
+            {% if current.validator %} {% set bgval = '' %} {% else %} {% set bgval = 'bg-danger' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bgval }}">
                 <img src="{{ url_for('static', filename='img/validator.png') }}"><br>
-                Купюроприемник <br>
+                Купюроприемник
             </div>
-            <div class="col-3">
+
+            {% if current.nfc %} {% set bgnfc = '' %} {% else %} {% set bgnfc = 'bg-danger' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bgnfc }}">
                 <img src="{{ url_for('static', filename='img/nfc.png') }}"><br>
-                NFC <br>
+                NFC
             </div>
-            <div class="col-3">
+
+            {% if current.printer %} {% set bgprn = '' %} {% else %} {% set bgprn = 'bg-danger' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bgprn }}">
                 <img src="{{ url_for('static', filename='img/printer.png') }}"><br>
-                Принтер <br>
+                Принтер
             </div>
         </div>
+
         <h4 class="p-2">Система</h4>
         <div class="row">
-            <div class="col-3">
+            <div class="col-3 text-center p-2 ">
                 <img src="{{ url_for('static', filename='img/hdd.png') }}"><br>
                 Накопитель <br>
                 Использовано {{ current.hdd }} %
             </div>
-            <div class="col-3">
+            <div class="col-3 text-center p-2 ">
                 <img src="{{ url_for('static', filename='img/cpu.png') }}"><br>
                 Процессор <br>
                 Использовано {{ current.cpu }} %
             </div>
-            <div class="col-3">
+            <div class="col-3 text-center p-2 ">
                 <img src="{{ url_for('static', filename='img/ram.png') }}"><br>
                 Память <br>
                 Использовано {{ current.ram }} %
             </div>
-            <div class="col-3">
-                <img src="{{ url_for('static', filename='img/internet.png') }}"><br>
-                Интернет <br>
-                Потери {{ current.internet }} %
+
+            {% if current.api == 'ok' %} {% set bgapi = '' %}
+            {% elif current.api == 'down' %} {% set bgapi = 'bg-danger' %}
+            {% elif current.api == 'Offline time' %} {% set bgapi = 'bg-secondary' %}
+            {% else %} {% set bgapi = 'bg-warning' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bgapi }}">
+                <img src="{{ url_for('static', filename='img/api.png') }}"><br>
+                API <br>
+                {{ current.api }}
             </div>
         </div>
     </div>
-    <div class="col-6 border border-dark">
-        <h3>Статистика за сутки</h3>
-        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='usb') }}">
+
+    <div class="col-6 text-center border">
+        {% if count > 0 %}
+            <h3>Статистика USB за сутки</h3>
+            <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='usb') }}">
+        {% else %}
+            <h2>Статистика за этот день отсутствует</h2>
+        {% endif%}
     </div>
 </div>
 
+{% if count > 0 %}
 <div class="row">
     <div class="col-4">
         <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='internet') }}">
@@ -87,4 +113,5 @@
         <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='hdd') }}">
     </div>
 </div>
+{% endif %}
 {% endblock %}

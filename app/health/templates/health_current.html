@@ -18,7 +18,6 @@
                 <th>Снято</th>
                 <th>ПО</th>
                 <th>Аптайм</th>
-                <th>Интернет</th>
                 <th>VPN</th>
                 <th>CPU</th>
                 <th>RAM</th>
@@ -47,8 +46,6 @@
                     {% endif %}
 
                     <td>{{ i.uptime }}</td>
-{# Инернет и ВПН не раскрашиваем. Или есть, или паркомат не выходит на связь #}
-                    <td>{{ i.internet }}</td>
                     <td>{{ i.vpn }}</td>
                     <td>{{ i.cpu }}</td>
                     <td>{{ i.ram }}</td>
@@ -56,10 +53,10 @@
 
 {# Монетник, купюрник, НФЦ, принтер - булевые значения #}
 
-                    {% if i.coin %}      <td class="bg-success">c</td> {% else %} <td class="bg-danger">c</td> {% endif %}
-                    {% if i.validator %} <td class="bg-success">v</td> {% else %} <td class="bg-danger">v</td> {% endif %}
-                    {% if i.nfc %}       <td class="bg-success">n</td> {% else %} <td class="bg-danger">n</td> {% endif %}
-                    {% if i.printer %}   <td class="bg-success">p</td> {% else %} <td class="bg-danger">p</td> {% endif %}
+                    {% if i.coin %}      <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
+                    {% if i.validator %} <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
+                    {% if i.nfc %}       <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
+                    {% if i.printer %}   <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
 
 {# Журнал скрыт по умолчанию #}
 
