@@ -1,0 +1,90 @@
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="col-12 mb-4 mt-4">
+        {{ wtf.quick_form(form, form_type="inline") }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 border border-dark">
+        <h3>Последние показатели</h3>
+        <h4 class="p-2">Периферия USB</h4>
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/coin.png') }}"><br>
+                Монетоприемник <br>
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/validator.png') }}"><br>
+                Купюроприемник <br>
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/nfc.png') }}"><br>
+                NFC <br>
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/printer.png') }}"><br>
+                Принтер <br>
+            </div>
+        </div>
+        <h4 class="p-2">Система</h4>
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/hdd.png') }}"><br>
+                Накопитель <br>
+                Использовано {{ current.hdd }} %
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/cpu.png') }}"><br>
+                Процессор <br>
+                Использовано {{ current.cpu }} %
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/ram.png') }}"><br>
+                Память <br>
+                Использовано {{ current.ram }} %
+            </div>
+            <div class="col-3">
+                <img src="{{ url_for('static', filename='img/internet.png') }}"><br>
+                Интернет <br>
+                Потери {{ current.internet }} %
+            </div>
+        </div>
+    </div>
+    <div class="col-6 border border-dark">
+        <h3>Статистика за сутки</h3>
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='usb') }}">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='internet') }}">
+    </div>
+    <div class="col-4">
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='vpn') }}">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='cpu') }}">
+    </div>
+    <div class="col-4">
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='ram') }}">
+    </div>
+    <div class="col-4">
+        <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='hdd') }}">
+    </div>
+</div>
+{% endblock %}

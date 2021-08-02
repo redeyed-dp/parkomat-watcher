@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% block app_content %}
+
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <h5>Паркоматы</h5>
+        <hr>
+        <a class="btn btn-light col-2" role="button" href="{{ url_for('catalog.index') }}">
+            <img src="{{ url_for('static', filename='img/catalog.png') }}"><br>
+            Реестр паркоматов
+        </a>
+        <a class="btn btn-light col-2" role="button" href="{{ url_for('health.current') }}">
+            <img src="{{ url_for('static', filename='img/heartbeat.png') }}"><br>
+            Текущее состояне
+        </a>
+
+        <h5>Система</h5>
+        <hr>
+        <a class="btn btn-light col-2" role="button" href="{{ url_for('admins') }}">
+            <img src="{{ url_for('static', filename='img/admins.png') }}"><br>
+            Администраторы
+        </a>
+    </div>
+</div>
+{% endblock %}

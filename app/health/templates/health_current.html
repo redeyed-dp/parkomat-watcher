@@ -1,0 +1,78 @@
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-sm table-hover border border-dark">
+            <thead class="thead-dark">
+                <th>Паркомат</th>
+                <th>Отправлено</th>
+                <th>Снято</th>
+                <th>ПО</th>
+                <th>Аптайм</th>
+                <th>Интернет</th>
+                <th>VPN</th>
+                <th>CPU</th>
+                <th>RAM</th>
+                <th>HDD</th>
+                <th>Монетник</th>
+                <th>Купюрник</th>
+                <th>NFC</th>
+                <th>Принтер</th>
+                <th>Журнал</th>
+            </thead>
+            <tbody>
+            {% for i in health %}
+                <tr>
+                    <td>{{ i.host }}</td>
+                    <td>{{ i.received }}</td>
+                    <td>{{ i.probed }}</td>
+
+                    {% if i.api == 'ok' %}
+                        <td class="bg-success">ok</td>
+                    {% elif i.api == 'down' %}
+                        <td class="bg-danger">down</td>
+                    {% elif i.api == 'Offline time' %}
+                        <td class="bg-secondary">sleep</td>
+                    {% else %}
+                        <td class="bg-warning" title="{{ i.api }}">{{ i.api }}</td>
+                    {% endif %}
+
+                    <td>{{ i.uptime }}</td>
+{# Инернет и ВПН не раскрашиваем. Или есть, или паркомат не выходит на связь #}
+                    <td>{{ i.internet }}</td>
+                    <td>{{ i.vpn }}</td>
+                    <td>{{ i.cpu }}</td>
+                    <td>{{ i.ram }}</td>
+                    <td>{{ i.hdd }}</td>
+
+{# Монетник, купюрник, НФЦ, принтер - булевые значения #}
+
+                    {% if i.coin %}      <td class="bg-success">c</td> {% else %} <td class="bg-danger">c</td> {% endif %}
+                    {% if i.validator %} <td class="bg-success">v</td> {% else %} <td class="bg-danger">v</td> {% endif %}
+                    {% if i.nfc %}       <td class="bg-success">n</td> {% else %} <td class="bg-danger">n</td> {% endif %}
+                    {% if i.printer %}   <td class="bg-success">p</td> {% else %} <td class="bg-danger">p</td> {% endif %}
+
+{# Журнал скрыт по умолчанию #}
+
+                    <td>
+                        {% if i.log|length > 0 %}
+                            <p title="{{ i.log }}">log</p>
+                        {% endif %}
+                    </td>
+                    <td class="d-none">{{ i.log }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

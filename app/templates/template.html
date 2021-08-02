@@ -1,0 +1,42 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+   iCity parkomat-beholder
+{% endblock %}
+
+{% block metas %}
+    <meta charset="utf8">
+{% endblock %}
+
+{% block content %}
+    {% block modal_content %}
+    {% endblock %}
+<div class="container-fluid">
+    <div class="row bg-dark text-light p-1">
+        <div class="col-sm-1">
+
+        </div>
+        <div class="col-sm-10 text-right">
+            Вы вошли как {{ current_user.login }}
+        </div>
+        <div class="col-sm-1">
+            <a href="{{ url_for('logout') }}">
+                <img src="{{ url_for('static', filename='img/logout.png') }}" title="Выйти">
+            </a>
+        </div>
+    </div>
+        <div class="col-12 p-4">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-info mt-3" role="alert"> {{ message }} </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block app_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-8">
+        {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('sm', 3, 9)) }}
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <table class="table table-sm table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th> Логин </th>
+                    <th> Имя </th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for admin in admins %}
+                <tr>
+                    <td>{{ admin.login }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>
+добавить удаление, изменение пароля
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

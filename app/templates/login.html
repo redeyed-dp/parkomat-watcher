@@ -1,0 +1,29 @@
+
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+{% block content %}
+
+<div class="row-fluid">
+    <div class="col-12">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning mt-3" role="alert"> {{ message }} </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="col-sm-6 offset-sm-3 p-4 border login_fields">
+        {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('sm', 3, 9)) }}
+    </div>
+</div>
+
+
+{% endblock %}
