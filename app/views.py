@@ -35,7 +35,7 @@ def logout():
 def index():
     return render_template("index.html")
 
-@app.route("/admins", methods=['GET', 'POST'])
+@app.route("/admins/", methods=['GET', 'POST'])
 @login_required
 def admins():
     form = AdminForm()

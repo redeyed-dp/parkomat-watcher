@@ -126,7 +126,7 @@ def sheet(host):
                                                   extract('day', Health.received) == day)).all()
     return render_template("health_raw.html", health=health, form=form)
 
-@bp.route("/current")
+@bp.route("/current/")
 @login_required
 def current():
     health = []
