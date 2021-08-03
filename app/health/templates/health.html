@@ -77,7 +77,7 @@
 
             {% if current.api == 'ok' %} {% set bgapi = '' %}
             {% elif current.api == 'down' %} {% set bgapi = 'bg-danger' %}
-            {% elif current.api == 'Offline time\n' %} {% set bgapi = 'bg-secondary' %}
+            {% elif 'Offline time' in current.api %} {% set bgapi = 'bg-secondary' %}
             {% else %} {% set bgapi = 'bg-warning' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgapi }}">
                 <img src="{{ url_for('static', filename='img/api.png') }}"><br>

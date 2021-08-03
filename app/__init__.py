@@ -11,6 +11,12 @@ lm.init_app(app)
 lm.login_view = 'login'
 bootstrap = Bootstrap(app)
 
+from app.crontab import crontab
+crontab.init_app(app)
+
+from app.crontab import bp as cron
+app.register_blueprint(cron, url_prefix='/cron')
+
 from app.catalog import bp as catalog
 app.register_blueprint(catalog, url_prefix='/catalog')
 

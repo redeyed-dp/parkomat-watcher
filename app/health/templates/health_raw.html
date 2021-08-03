@@ -44,7 +44,7 @@
                         <td class="bg-success">ok</td>
                     {% elif i.api == 'down' %}
                         <td class="bg-danger">down</td>
-                    {% elif i.api == 'Offline time\n' %}
+                    {% elif 'Offline time' in i.api %}
                         <td class="bg-secondary">sleep</td>
                     {% else %}
                         <td class="bg-warning" title="{{ i.api }}">error</td>

@@ -20,6 +20,10 @@
             <img src="{{ url_for('static', filename='img/admins.png') }}"><br>
             Администраторы
         </a>
+        <a class="btn btn-light col-2" role="button" href="{{ url_for('cron.index') }}">
+            <img src="{{ url_for('static', filename='img/crontab.png') }}"><br>
+            Планировщик
+        </a>
     </div>
 </div>
 {% endblock %}
