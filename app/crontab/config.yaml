@@ -1,3 +1,4 @@
+check_cert: true
 clear_db: true
 clear_db_days: 3
 evening_report: false

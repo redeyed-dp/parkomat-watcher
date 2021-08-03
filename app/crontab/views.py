@@ -14,6 +14,7 @@ def index():
         config['clear_db_days'] = form.clear_db_days.data
         config['morning_report'] = form.morning_report.data
         config['evening_report'] = form.evening_report.data
+        config['check_cert'] = form.check_cert.data
         Config.write('app/crontab/config.yaml', config)
         flash("Настройки сохранены")
         return redirect(url_for('cron.index'))
@@ -21,4 +22,5 @@ def index():
     form.clear_db_days.data = config.get('clear_db_days')
     form.morning_report.data = config.get('morning_report')
     form.evening_report.data = config.get('evening_report')
+    form.check_cert.data = config.get('check_cert')
     return render_template("crontab.html", form=form)

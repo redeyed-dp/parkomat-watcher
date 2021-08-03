@@ -7,4 +7,5 @@ class CrontabForm(FlaskForm):
     clear_db_days = IntegerField("Дней", validators=[NumberRange(min=1, max=365)])
     morning_report = BooleanField("Утренний отчет в Telegram")
     evening_report = BooleanField("Вечерний отчет в Telegram")
+    check_cert = BooleanField("Проверять обновление сертификатов на сайте https://iit.com.ua/downloads")
     submit = SubmitField("Сохранить настройки")

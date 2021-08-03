@@ -2,6 +2,8 @@ from app import db
 from app.catalog import bp
 from app.catalog.models import Parkomat
 from app.catalog.forms import AddParkomatForm
+from app.health.models import Health
+from sqlalchemy import delete
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_required
 
@@ -21,9 +23,10 @@ def index():
 @bp.route("/delete/<int:id>")
 @login_required
 def delete(id):
-    parkomat = db.session.query(Parkomat).filter(Parkomat.id == id).one()
-    db.session.delete(parkomat)
+    db.session.execute(delete(Parkomat).where(Parkomat.id == id))
+    db.session.execute(delete(Health).where(Health.host == id))
     db.session.commit()
+    flash("Паркомат {} удален".format(id))
     return redirect(url_for("catalog.index"))
 
 @bp.route("/disable/<int:id>")
@@ -32,6 +35,7 @@ def disable(id):
     parkomat = db.session.query(Parkomat).filter(Parkomat.id==id).one()
     parkomat.enabled = False
     db.session.commit()
+    flash("Отключен монаторинг паркомата {}".format(id))
     return redirect(url_for("catalog.index"))
 
 @bp.route("/enable/<int:id>")
@@ -40,4 +44,5 @@ def enable(id):
     parkomat = db.session.query(Parkomat).filter(Parkomat.id==id).one()
     parkomat.enabled = True
     db.session.commit()
+    flash("Включен мониторинг паркомата {}".format(id))
     return redirect(url_for("catalog.index"))
