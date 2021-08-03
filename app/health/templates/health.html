@@ -21,6 +21,7 @@
             <div class="col-12 text-center"><h3>Последние показатели</h3></div>
         </div>
 
+        {% if current is not none %}
         <p>Снято {{ current.probed }}</p>
         <p>Отправлено {{ current.received }}</p>
 
@@ -29,32 +30,36 @@
             {% if current.coin %} {% set bgcoin = '' %} {% else %} {% set bgcoin = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgcoin }}">
                 <img src="{{ url_for('static', filename='img/coin.png') }}"><br>
-                Монетоприемник
+                Монетоприемник <br>
+                {% if current.coin %} OK {% else %} Не подключен {% endif %}
             </div>
-
 
             {% if current.validator %} {% set bgval = '' %} {% else %} {% set bgval = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgval }}">
                 <img src="{{ url_for('static', filename='img/validator.png') }}"><br>
-                Купюроприемник
+                Купюроприемник <br>
+                {% if current.validator %} OK {% else %} Не подключен {% endif %}
             </div>
 
             {% if current.nfc %} {% set bgnfc = '' %} {% else %} {% set bgnfc = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgnfc }}">
                 <img src="{{ url_for('static', filename='img/nfc.png') }}"><br>
-                NFC
+                NFC <br>
+                {% if current.nfc %} OK {% else %} Не подключен {% endif %}
             </div>
 
             {% if current.printer %} {% set bgprn = '' %} {% else %} {% set bgprn = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgprn }}">
                 <img src="{{ url_for('static', filename='img/printer.png') }}"><br>
-                Принтер
+                Принтер <br>
+                {% if current.printer %} OK {% else %} Не подключен {% endif %}
             </div>
         </div>
 
         <h4 class="p-2">Система</h4>
         <div class="row">
-            <div class="col-3 text-center p-2 ">
+            {% if current.hdd > 99 %} {% set bghdd = 'bg-warning' %} {% endif %}
+            <div class="col-3 text-center p-2 {{ bghdd }}">
                 <img src="{{ url_for('static', filename='img/hdd.png') }}"><br>
                 Накопитель <br>
                 Использовано {{ current.hdd }} %
@@ -72,7 +77,7 @@
 
             {% if current.api == 'ok' %} {% set bgapi = '' %}
             {% elif current.api == 'down' %} {% set bgapi = 'bg-danger' %}
-            {% elif current.api == 'Offline time' %} {% set bgapi = 'bg-secondary' %}
+            {% elif current.api == 'Offline time\n' %} {% set bgapi = 'bg-secondary' %}
             {% else %} {% set bgapi = 'bg-warning' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgapi }}">
                 <img src="{{ url_for('static', filename='img/api.png') }}"><br>
@@ -80,6 +85,9 @@
                 {{ current.api }}
             </div>
         </div>
+        {% else %}
+            <h2>С этого паркомата еще не поступало информации</h2>
+        {% endif %}
     </div>
 
     <div class="col-6 text-center border">
