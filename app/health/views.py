@@ -67,8 +67,8 @@ def draw(host, year, month, day, param):
                                 extract('day', Health.received) == day)
                             ).order_by(Health.id.desc()).all()
     fig = Figure()
-
     if param in ('internet', 'vpn', 'cpu', 'ram', 'hdd'):
+
         fig.set_size_inches(w=6, h=2)
         axis = fig.add_subplot(1, 1, 1)
         xs = [s.received for s in stat]
@@ -81,24 +81,28 @@ def draw(host, year, month, day, param):
         axis.xaxis.set_major_formatter(DateFormatter("%H:%M"))
         axis.plot(xs, ys, color=preset[param]['color'])
     elif param == 'usb':
-        axis_c = fig.add_subplot(4, 1, 1)
-        axis_c.set(title='Монетник', ylim=[0, 1], yticks=[], xticks=[], aspect=0.02)
-        axis_v = fig.add_subplot(4, 1, 2)
-        axis_v.set(title='Купюрник', ylim=[0, 1], yticks=[], xticks=[], aspect=0.02)
-        axis_n = fig.add_subplot(4, 1, 3)
-        axis_n.set(title='NFC', ylim=[0, 1], yticks=[], xticks=[], aspect=0.02)
-        axis_p = fig.add_subplot(4, 1, 4)
-        axis_p.set(title='Принтер', ylim=[0, 1], yticks=[], xticks=[], aspect=0.02)
+        (axis_c, axis_v, axis_n, axis_p) = fig.subplots(4, 1, sharex=True)
+        axis_c.set(title='Монетник', ylim=[0, 1], yticks=[], aspect=0.02)
+        axis_c.xaxis.set_major_formatter(DateFormatter("%H:%M"))
+        axis_v.set(title='Купюрник', ylim=[0, 1], yticks=[], aspect=0.02)
+        axis_v.xaxis.set_major_formatter(DateFormatter("%H:%M"))
+        axis_n.set(title='NFC', ylim=[0, 1], yticks=[], aspect=0.02)
+        axis_n.xaxis.set_major_formatter(DateFormatter("%H:%M"))
+        axis_p.set(title='Принтер', ylim=[0, 1], yticks=[], aspect=0.02)
+        axis_p.xaxis.set_major_formatter(DateFormatter("%H:%M"))
         xs = [s.received for s in stat]
         ys_c = [bool_to_int(getattr(s, 'coin')) for s in stat]
         ys_v = [bool_to_int(getattr(s, 'validator')) for s in stat]
         ys_n = [bool_to_int(getattr(s, 'nfc')) for s in stat]
         ys_p = [bool_to_int(getattr(s, 'printer')) for s in stat]
-        axis_c.plot(xs, ys_c, color='red')
-        axis_v.plot(xs, ys_v, color='red')
-        axis_n.plot(xs, ys_n, color='red')
-        axis_p.plot(xs, ys_p, color='red')
-
+        axis_c.fill_between(xs, 0, ys_c, color='green')
+        axis_c.fill_between(xs, ys_c, 1, color='red')
+        axis_v.fill_between(xs, 0, ys_v, color='green')
+        axis_v.fill_between(xs, ys_v, 1, color='red')
+        axis_n.fill_between(xs, 0, ys_n, color='green')
+        axis_n.fill_between(xs, ys_n, 1, color='red')
+        axis_p.fill_between(xs, 0, ys_p, color='green')
+        axis_p.fill_between(xs, ys_p, 1, color='red')
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
@@ -124,7 +128,7 @@ def sheet(host):
                                                   extract('year', Health.received) == year,
                                                   extract('month', Health.received) == month,
                                                   extract('day', Health.received) == day)).all()
-    return render_template("health_raw.html", health=health, form=form)
+    return render_template("health_raw.html", health=health, form=form, host=host)
 
 @bp.route("/current/")
 @login_required
