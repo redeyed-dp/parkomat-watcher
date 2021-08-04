@@ -25,9 +25,13 @@
         </div>
 
         {% if current is not none %}
-        <p>Снято {{ current.probed }}</p>
-        <p>Отправлено {{ current.received }}</p>
-
+        <div class="row">
+            <div class="col-3">Снято</div><div class="col-3">{{ current.probed }}</div>
+            <div class="col-3">Аптайм</div><div class="col-3">{{ current.uptime }}</div>
+        </div>
+        <div class="row">
+            <div class="col-3">Отправлено</div><div class="col-3">{{ current.received }}</div>
+        </div>
         <h4 class="p-2">Периферия USB</h4>
         <div class="row">
             {% if current.coin %} {% set bgcoin = '' %} {% else %} {% set bgcoin = 'bg-danger' %} {% endif %}
@@ -110,6 +114,22 @@
     </div>
     <div class="col-4">
         <img src="{{ url_for('health.draw', host=host, year=year, month=month, day=day, param='vpn') }}">
+    </div>
+    <div class="col-4">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center">Количество "отпаданий" USB</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Монетоприемник</td><td>{{ counters['coin'] }}</td></tr>
+                <tr><td>Купюроприемник</td><td>{{ counters['validator'] }}</td></tr>
+                <tr><td>NFC</td><td>{{ counters['nfc'] }}</td></tr>
+                <tr><td>Принтер</td><td>{{ counters['printer'] }}</td></tr>
+                <tr><td>Перезагрузки ОС</td><td>{{ counters['reboot'] }}</td></tr>
+                </tbody>
+        </table>
     </div>
 </div>
 

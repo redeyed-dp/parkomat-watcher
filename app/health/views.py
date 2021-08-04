@@ -6,7 +6,6 @@ from app.health.forms import DayForm
 from flask import render_template, request, Response
 from flask_login import login_required
 from datetime import datetime
-from sqlalchemy import extract, and_, func
 import re
 import io
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -32,13 +31,10 @@ def graph(host):
         form.day.default = datetime.now().day
         form.process()
     current = db.session.query(Health).filter(Health.host==host).order_by(Health.id.desc()).first()
-    count = db.session.query(Health).filter(and_(
-                Health.host == host,
-                extract('year', Health.received) == year,
-                extract('month', Health.received) == month,
-                extract('day', Health.received) == day
-            )).count()
-    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current, count=count)
+    health = Health.dayStat(host=host, year=year, month=month, day=day)
+    count = len(health)
+    counters = Health.counters(health)
+    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current, count=count, counters=counters)
 
 @bp.route("/<int:host>/<int:year>/<int:month>/<int:day>/<param>.png")
 def draw(host, year, month, day, param):
@@ -60,15 +56,9 @@ def draw(host, year, month, day, param):
     }
     if param not in preset.keys():
         return Response(status=404)
-    stat = db.session.query(Health).filter(and_(
-                                Health.host==host,
-                                extract('year', Health.received) == year,
-                                extract('month', Health.received) == month,
-                                extract('day', Health.received) == day)
-                            ).order_by(Health.id.desc()).all()
+    stat = Health.dayStat(host=host, year=year, month=month, day=day)
     fig = Figure()
     if param in ('internet', 'vpn', 'cpu', 'ram', 'hdd'):
-
         fig.set_size_inches(w=6, h=2)
         axis = fig.add_subplot(1, 1, 1)
         xs = [s.received for s in stat]
@@ -124,10 +114,7 @@ def sheet(host):
         form.month.default = datetime.now().month
         form.day.default = datetime.now().day
         form.process()
-    health = db.session.query(Health).filter(and_(Health.host == host,
-                                                  extract('year', Health.received) == year,
-                                                  extract('month', Health.received) == month,
-                                                  extract('day', Health.received) == day)).all()
+    health = Health.dayStat(host=host, year=year, month=month, day=day)
     return render_template("health_raw.html", health=health, form=form, host=host)
 
 @bp.route("/current/")
