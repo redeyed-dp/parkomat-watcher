@@ -32,3 +32,10 @@ def check_cert():
         if new and new > get_old_version():
             tg_send_message("Доступны новые сертификаты на сайте https://iit.com.ua/downloads")
             save_current_version(new)
+
+@crontab.job(minute="30", hour="7")
+def morning():
+    config = Config.read('app/crontab/config.yaml')
+    if config.get('morning_report'):
+        from app.crontab.report import morning_report
+        morning_report()

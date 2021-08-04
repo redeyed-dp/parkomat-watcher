@@ -97,7 +97,6 @@ def draw(host, year, month, day, param):
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
-
 @bp.route("/sheet/<int:host>", methods=['GET', 'POST'])
 @login_required
 def sheet(host):
@@ -121,12 +120,11 @@ def sheet(host):
 @login_required
 def current():
     health = []
-    parkomats = db.session.query(Parkomat.id).filter(Parkomat.enabled==True).order_by(Parkomat.id).all()
-    for p in parkomats:
-        probe = db.session.query(Health).filter(Health.host==p[0]).order_by(Health.id.desc()).first()
+    for p in Parkomat.observed():
+        probe = db.session.query(Health).filter(Health.host==p).order_by(Health.id.desc()).first()
         if probe is not None:
             health.append(probe)
-    return render_template("health_current.html", health=health, parkomats=parkomats)
+    return render_template("health_current.html", health=health)
 
 @bp.route("/api", methods=['POST'])
 def api():
