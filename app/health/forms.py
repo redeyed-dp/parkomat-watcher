@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField
+from datetime import datetime
 
 monthes = {
     1: 'январь',
@@ -21,3 +22,21 @@ class DayForm(FlaskForm):
     month = SelectField("Месяц", choices=[ (i, monthes[i]) for i in monthes.keys() ], coerce=int)
     day = SelectField("День", choices=[(i, i) for i in range(1,32) ], coerce=int)
     submit = SubmitField("Показать")
+
+    def getDay(self):
+        year = self.year.data
+        month = self.month.data
+        day = self.day.data
+        return (year, month, day)
+
+    def getNow(self):
+        year = datetime.now().year
+        month = datetime.now().month
+        day = datetime.now().day
+        return (year, month, day)
+
+    def setNow(self):
+        self.year.default = datetime.now().year
+        self.month.default = datetime.now().month
+        self.day.default = datetime.now().day
+        self.process()

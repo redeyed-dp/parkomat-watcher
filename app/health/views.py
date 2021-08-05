@@ -19,17 +19,10 @@ from matplotlib.ticker import ScalarFormatter
 def graph(host):
     form = DayForm()
     if form.validate_on_submit():
-        year = form.year.data
-        month = form.month.data
-        day = form.day.data
+        (year, month, day) = form.getDay()
     else:
-        year = datetime.now().year
-        month = datetime.now().month
-        day = datetime.now().day
-        form.year.default = datetime.now().year
-        form.month.default = datetime.now().month
-        form.day.default = datetime.now().day
-        form.process()
+        (year, month, day) = form.getNow()
+        form.setNow()
     current = db.session.query(Health).filter(Health.host==host).order_by(Health.id.desc()).first()
     health = Health.dayStat(host=host, year=year, month=month, day=day)
     count = len(health)
@@ -102,17 +95,10 @@ def draw(host, year, month, day, param):
 def sheet(host):
     form = DayForm()
     if form.validate_on_submit():
-        year = form.year.data
-        month = form.month.data
-        day = form.day.data
+        (year, month, day) = form.getDay()
     else:
-        year = datetime.now().year
-        month = datetime.now().month
-        day = datetime.now().day
-        form.year.default = datetime.now().year
-        form.month.default = datetime.now().month
-        form.day.default = datetime.now().day
-        form.process()
+        (year, month, day) = form.getNow()
+        form.setNow()
     health = Health.dayStat(host=host, year=year, month=month, day=day)
     return render_template("health_raw.html", health=health, form=form, host=host)
 
