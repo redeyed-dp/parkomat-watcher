@@ -10,6 +10,7 @@ flask-crontab==0.1.2
 Flask-Login==0.5.0
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.15.1
+fpdf==1.7.2
 greenlet==1.1.0
 idna==3.2
 itsdangerous==2.0.1

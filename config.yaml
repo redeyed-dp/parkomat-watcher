@@ -1,5 +1,5 @@
 check_cert: true
 clear_db: true
 clear_db_days: 3
-evening_report: false
-morning_report: false
+evening_report: true
+morning_report: true

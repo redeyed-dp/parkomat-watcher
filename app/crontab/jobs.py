@@ -1,6 +1,6 @@
 from app.crontab import crontab
-from app.crontab.config import Config
-from app.crontab.telegram import tg_send_message
+from app.lib.config import Config
+from app.lib.telegram import tg_send_message
 from app import db
 from app.health.models import Health
 from sqlalchemy import delete
@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 
 @crontab.job(minute="30", hour="0")
 def clean_db():
-    config = Config.read('app/crontab/config.yaml')
+    config = Config.read()
     if config.get('clear_db') and config.get('clear_db_days'):
         old = datetime.today() - timedelta(days=config.get('clear_db_days'))
         db.session.execute(delete(Health).where(Health.received <= old.date()))
@@ -25,7 +25,7 @@ def clean_db():
 
 @crontab.job(minute="55", hour="7")
 def check_cert():
-    config = Config.read('app/crontab/config.yaml')
+    config = Config.read()
     if config.get('check_cert'):
         from app.crontab.check_certificates import get_current_version, get_old_version, save_current_version
         new = get_current_version()
@@ -35,7 +35,14 @@ def check_cert():
 
 @crontab.job(minute="30", hour="7")
 def morning():
-    config = Config.read('app/crontab/config.yaml')
+    config = Config.read()
     if config.get('morning_report'):
         from app.crontab.report import morning_report
         morning_report()
+
+@crontab.job(minute="55", hour="19")
+def evening():
+    config = Config.read()
+    if config.get('evening_report'):
+        from app.crontab.report import evening_report
+        evening_report()
