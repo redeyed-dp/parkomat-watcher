@@ -34,9 +34,9 @@ class Health(db.Model):
     @staticmethod
     def dayStat(host, year, month, day):
         return db.session.query(Health).filter(and_(Health.host == host,
-                                             extract('year', Health.received) == year,
-                                             extract('month', Health.received) == month,
-                                             extract('day', Health.received) == day)).all()
+                                             extract('year', Health.probed) == year,
+                                             extract('month', Health.probed) == month,
+                                             extract('day', Health.probed) == day)).all()
 
     @staticmethod
     def counters(health):

@@ -13,26 +13,26 @@
     <div class="col-12 p-4">
         <form action="" method="post" class="needs-validation">
             {{ form.hidden_tag() }}
-            <div class="form-group row">
-                {{ form.clear_db.label(class="form-control-label col-form-label-sm col-3") }}
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.clear_db.label(class="form-control-label col-form-label-sm col-4") }}
                 <div class="col-1">{{ form.clear_db(class="form-control form-control-sm") }}</div>
                 <div class="col-1"> через </div>
                 <div class="col-1">{{ form.clear_db_days(class="form-control form-control-sm") }}</div>
                 {{ form.clear_db_days.label(class="form-control-label col-form-label-sm col-4") }}
             </div>
 
-            <div class="form-group row">
-                {{ form.morning_report.label(class="form-control-label col-form-label-sm col-3") }}
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.morning_report.label(class="form-control-label col-form-label-sm col-4") }}
                 <div class="col-1">{{ form.morning_report(class="form-control form-control-sm") }}</div>
             </div>
 
-            <div class="form-group row">
-                {{ form.evening_report.label(class="form-control-label col-form-label-sm col-3") }}
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.evening_report.label(class="form-control-label col-form-label-sm col-4") }}
                 <div class="col-1">{{ form.evening_report(class="form-control form-control-sm") }}</div>
             </div>
 
-            <div class="form-group row">
-                {{ form.check_cert.label(class="form-control-label col-form-label-sm col-3") }}
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.check_cert.label(class="form-control-label col-form-label-sm col-4") }}
                 <div class="col-1">{{ form.check_cert(class="form-control form-control-sm") }}</div>
             </div>
 
