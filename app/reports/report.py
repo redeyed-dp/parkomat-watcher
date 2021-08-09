@@ -27,6 +27,8 @@ def morning_report(name):
             lastprobe = db.session.query(Health.api).filter(Health.host == p).order_by(Health.id.desc()).first()
             if lastprobe.api != 'ok':
                 status[p]['api'] = lastprobe.api
+            else:
+                status[p]['api'] = 'OK'
             c = db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
             if c > 10:
                 status[p]['coin'] = 'ERROR'
