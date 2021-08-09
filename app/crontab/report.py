@@ -1,32 +1,81 @@
 from app import db
 from app.catalog.models import Parkomat
 from app.health.models import Health
-from app.lib.telegram import tg_send_message, tg_send_file
 from sqlalchemy import and_
 from datetime import datetime, timedelta
 import fpdf
 
-def morning_report():
+#############################################################################################
+#                                  WARNING!!!                                               #
+# Don't forget download unicode fonts for FPDF                                              #
+# https://github.com/reingart/pyfpdf/releases/download/binary/fpdf_unicode_font_pack.zip    #
+#                                                                                           #
+#############################################################################################
+
+def morning_report(name):
     offline = []
-    api = []
+    status = dict()
     parkomats = Parkomat.observed()
-    old = datetime.today() - timedelta(minutes=30)
+    old = datetime.now() - timedelta(minutes=30)
     for p in parkomats:
+        # Офлайн - не выходили на связь более 30 минут
         count = db.session.query(Health).filter(and_(Health.host == p, Health.received > old)).count()
         if count == 0:
             offline.append(p)
         else:
+            # Состояние ПО
             lastprobe = db.session.query(Health.api).filter(Health.host == p).order_by(Health.id.desc()).first()
             if lastprobe.api != 'ok':
-                api.append("№{}: {}\n".format(p, lastprobe.api))
-    if len(offline) > 0:
-        tg_send_message("Не вышли на связь: {}".format(', '.join(offline)))
-    if len(api) > 0:
-        tg_send_message("Проблемы API: \n {}".format("\n".join(api)))
-    if len(offline) == 0 and len(api) == 0:
-        tg_send_message("На всех наблюдаемых паркоматах все ОК :-)")
+                status[p]['api'] = lastprobe.api
+            c = db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
+            if c > 10:
+                status[p]['coin'] = 'ERROR'
+            else:
+                status[p]['coin'] = 'OK'
+            v =  db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
+            if v > 10:
+                status[p]['validator'] = 'ERROR'
+            else:
+                status[p]['validator'] = 'OK'
 
-def evening_report():
+    pdf = fpdf.FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVu', '', '../font/DejaVuSerifCondensed.ttf', uni=True)
+    # Head
+    pdf.set_font('DejaVu', '', 16)
+    d = datetime.now()
+    pdf.cell(200, 10, name, 0, 1, "C")
+    # Offline
+    pdf.set_font('DejaVu', '', 14)
+    if len(offline) > 0:
+        pdf.cell(200, 10, 'Не выходят на связь более 30 минут:', 0, 1, "C")
+        pdf.set_font('DejaVu', '', 12)
+        pdf.cell(200, 10, ', '.join(offline), 0, 1, "C")
+    else:
+        pdf.cell(200, 10, 'Все наблюдаемые паркоматы вышли на связь.', 0, 1, "C")
+    # API, devices
+    w = pdf.w / 13
+    h = pdf.font_size * 1.4
+    pdf.set_font('DejaVu', '', 12)
+    pdf.multi_cell(w * 2, h, "Паркомат №", 1, 0, 'C')
+    pdf.multi_cell(w, h, "Монетник", 1, 0, 'C')
+    pdf.multi_cell(w, h, "Купюрник", 1, 0, 'C')
+    pdf.multi_cell(w * 8, h, "API", 1, 0, 'C')
+    pdf.ln(h)
+    for p in parkomats:
+        if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':
+            pdf.multi_cell(w * 2, h, str(p), 1, 0, 'R')
+            pdf.multi_cell(w, h, status[p]['coin'], 1, 0, 'C')
+            pdf.multi_cell(w, h, status[p]['validator'], 1, 0, 'C')
+            pdf.multi_cell(w * 8, h, str(status[p]['API']), 1, 0, 'L')
+            pdf.ln(h)
+    # footer
+    pdf.set_font('DejaVu', '', 8)
+    pdf.cell(200, 10, f"Документ сформирован в {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}:{str.zfill(str(d.second), 2)}", 0, 1, "L")
+    pdf.output(f"{name}.pdf")
+
+
+def evening_report(name):
     d = datetime.now()
     observed = Parkomat.observed()
     usb = dict()
@@ -44,7 +93,7 @@ def evening_report():
     pdf.add_font('DejaVu', '', '../font/DejaVuSerifCondensed.ttf', uni=True)
     # Head
     pdf.set_font('DejaVu', '', 16)
-    pdf.cell(200, 10, f"Отчет {d.day}.{d.month}.{d.year}", 0, 1, "C")
+    pdf.cell(200, 10, name, 0, 1, "C")
     # Drive errors
     pdf.set_font('DejaVu', '', 14)
     pdf.cell(200, 10, '"Отпадания" накопителя', 0, 1, "C")
@@ -74,5 +123,7 @@ def evening_report():
         pdf.cell(w, h, str(usb[p]['printer']), 1, 0, 'C')
         pdf.cell(w, h, str(usb[p]['reboot']), 1, 0, 'C')
         pdf.ln(h)
-    pdf.output(f"report {d.day}-{d.month}-{d.year}.pdf")
-    tg_send_file(f"report {d.day}-{d.month}-{d.year}.pdf")
+    # footer
+    pdf.set_font('DejaVu', '', 8)
+    pdf.cell(200, 10, f"Документ сформирован в {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}:{str.zfill(str(d.second), 2)}", 0, 1, "L")
+    pdf.output(f"{name}.pdf")

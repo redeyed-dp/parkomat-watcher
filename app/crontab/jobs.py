@@ -1,6 +1,6 @@
 from app.crontab import crontab
 from app.lib.config import Config
-from app.lib.telegram import tg_send_message
+from app.lib.telegram import tg_send_message, tg_send_file
 from app import db
 from app.health.models import Health
 from sqlalchemy import delete
@@ -38,11 +38,17 @@ def morning():
     config = Config.read()
     if config.get('morning_report'):
         from app.crontab.report import morning_report
-        morning_report()
+        d = datetime.now()
+        name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (утро)"
+        morning_report(name)
+        tg_send_file(f"{name}.pdf")
 
 @crontab.job(minute="55", hour="19")
 def evening():
     config = Config.read()
     if config.get('evening_report'):
         from app.crontab.report import evening_report
-        evening_report()
+        d = datetime.now()
+        name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (вечер)"
+        evening_report(name)
+        tg_send_file(f"{name}.pdf")

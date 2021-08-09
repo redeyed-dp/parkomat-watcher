@@ -24,3 +24,4 @@ def index():
     form.evening_report.data = config.get('evening_report')
     form.check_cert.data = config.get('check_cert')
     return render_template("crontab.html", form=form)
+
