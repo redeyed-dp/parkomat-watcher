@@ -57,6 +57,8 @@ def morning_report(name):
     else:
         pdf.cell(200, 10, 'Все наблюдаемые паркоматы вышли на связь.', 0, 1, "C")
     # API, devices
+    pdf.set_font('DejaVu', '', 14)
+    pdf.cell(200, 10, 'Проблемы на наблюдаемых паркоматах', 0, 1, "C")
     w = pdf.w / 13
     h = pdf.font_size * 1.4
     pdf.set_font('DejaVu', '', 10)
@@ -67,10 +69,10 @@ def morning_report(name):
     pdf.ln(h)
     for p in status.keys():
         if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':
-            pdf.cell(w * 2, h, str(p), 1, 0, 'R')
+            pdf.cell(w, h, str(p), 1, 0, 'R')
             pdf.cell(w, h, status[p]['coin'], 1, 0, 'C')
             pdf.cell(w, h, status[p]['validator'], 1, 0, 'C')
-            pdf.cell(w * 8, h, str(status[p]['api']), 1, 0, 'L')
+            pdf.cell(w * 9, h, str(status[p]['api']), 1, 0, 'L')
             pdf.ln(h)
     # footer
     pdf.set_font('DejaVu', '', 8)
@@ -112,7 +114,7 @@ def evening_report(name):
     pdf.cell(200, 10, '"Отпадания" USB устройств', 0, 1, "C")
     w = pdf.w / 6.5
     h = pdf.font_size * 1.4
-    pdf.set_font('DejaVu', '', 12)
+    pdf.set_font('DejaVu', '', 10)
     pdf.cell(w, h, "Паркомат №", 1, 0, 'C')
     pdf.cell(w, h, "Монетник", 1, 0, 'C')
     pdf.cell(w, h, "Купюрник", 1, 0, 'C')
