@@ -21,7 +21,7 @@ def morning_report(name):
         # Офлайн - не выходили на связь более 30 минут
         count = db.session.query(Health).filter(and_(Health.host == p, Health.received > old)).count()
         if count == 0:
-            offline.append(p)
+            offline.append(str(p))
         else:
             # Состояние ПО
             lastprobe = db.session.query(Health.api).filter(Health.host == p).order_by(Health.id.desc()).first()
@@ -62,7 +62,7 @@ def morning_report(name):
     pdf.multi_cell(w, h, "Купюрник", 1, 0, 'C')
     pdf.multi_cell(w * 8, h, "API", 1, 0, 'C')
     pdf.ln(h)
-    for p in parkomats:
+    for p in status.keys():
         if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':
             pdf.multi_cell(w * 2, h, str(p), 1, 0, 'R')
             pdf.multi_cell(w, h, status[p]['coin'], 1, 0, 'C')
@@ -79,14 +79,16 @@ def evening_report(name):
     d = datetime.now()
     observed = Parkomat.observed()
     usb = dict()
-    hdd = dict()
+    drive = []
     for p in observed:
         health = Health.dayStat(host=p, year=d.year, month=d.month, day=d.day)
         usb[p] = Health.counters(health)
+        hdd = False
         for h in health:
             if h.hdd == 0:
-                hdd[p] = True
-    drive = hdd.keys()
+                hdd = True
+        if hdd:
+            drive.append(str(p))
 
     pdf = fpdf.FPDF()
     pdf.add_page()

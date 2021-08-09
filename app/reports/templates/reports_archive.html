@@ -10,13 +10,17 @@
 
 
 <div class="row">
-    {% for f in files %}
-        <div class="col-2">
-            <a href="{{ url_for('static', filename='reports/'+f ) }}">
-                <img src="{{ url_for('static', filename='img/pdf.png') }}"> {{ f }}
-            </a>
-        </div>
-    {% endfor %}
+    {% if files is not none %}
+        {% for f in files %}
+            <div class="col-2">
+                <a href="{{ url_for('static', filename='reports/'+f ) }}">
+                    <img src="{{ url_for('static', filename='img/pdf.png') }}"> {{ f }}
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 text-center">В архиве нет сохраненных отчетов</div>
+    {% endif %}
 </div>
 
 {% endblock %}

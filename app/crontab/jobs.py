@@ -37,7 +37,7 @@ def check_cert():
 def morning():
     config = Config.read()
     if config.get('morning_report'):
-        from app.crontab.report import morning_report
+        from app.reports.report import morning_report
         d = datetime.now()
         name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (утро)"
         morning_report(name)
@@ -47,7 +47,7 @@ def morning():
 def evening():
     config = Config.read()
     if config.get('evening_report'):
-        from app.crontab.report import evening_report
+        from app.reports.report import evening_report
         d = datetime.now()
         name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (вечер)"
         evening_report(name)
