@@ -72,7 +72,7 @@ def morning_report(name):
     # footer
     pdf.set_font('DejaVu', '', 8)
     pdf.cell(200, 10, f"Документ сформирован в {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}:{str.zfill(str(d.second), 2)}", 0, 1, "L")
-    pdf.output(f"{name}.pdf")
+    pdf.output(f"app/static/reports/{name}.pdf")
 
 
 def evening_report(name):
@@ -126,4 +126,4 @@ def evening_report(name):
     # footer
     pdf.set_font('DejaVu', '', 8)
     pdf.cell(200, 10, f"Документ сформирован в {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}:{str.zfill(str(d.second), 2)}", 0, 1, "L")
-    pdf.output(f"{name}.pdf")
+    pdf.output(f"app/static/reports/{name}.pdf")

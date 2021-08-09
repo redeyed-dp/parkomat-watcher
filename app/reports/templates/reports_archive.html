@@ -1,0 +1,22 @@
+{% extends "template.html" %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+
+
+<div class="row">
+    {% for f in files %}
+        <div class="col-2">
+            <a href="{{ url_for('static', filename='reports/'+f ) }}">
+                <img src="{{ url_for('static', filename='img/pdf.png') }}"> {{ f }}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

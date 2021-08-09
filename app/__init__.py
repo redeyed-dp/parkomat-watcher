@@ -23,4 +23,7 @@ app.register_blueprint(catalog, url_prefix='/catalog')
 from app.health import bp as health
 app.register_blueprint(health, url_prefix='/health')
 
+from app.reports import bp as reports
+app.register_blueprint(reports, url_prefix='/reports')
+
 from app import views

@@ -41,7 +41,7 @@ def morning():
         d = datetime.now()
         name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (утро)"
         morning_report(name)
-        tg_send_file(f"{name}.pdf")
+        tg_send_file(f"app/static/reports/{name}.pdf")
 
 @crontab.job(minute="55", hour="19")
 def evening():
@@ -51,4 +51,4 @@ def evening():
         d = datetime.now()
         name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (вечер)"
         evening_report(name)
-        tg_send_file(f"{name}.pdf")
+        tg_send_file(f"app/static/reports/{name}.pdf")
