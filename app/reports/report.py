@@ -14,7 +14,7 @@ import fpdf
 
 def morning_report(name):
     offline = []
-    status = dict()
+    status = {}
     parkomats = Parkomat.observed()
     old = datetime.now() - timedelta(minutes=30)
     for p in parkomats:
@@ -23,6 +23,7 @@ def morning_report(name):
         if count == 0:
             offline.append(str(p))
         else:
+            status[p] = {}
             # Состояние ПО
             lastprobe = db.session.query(Health.api).filter(Health.host == p).order_by(Health.id.desc()).first()
             if lastprobe.api != 'ok':
@@ -51,25 +52,25 @@ def morning_report(name):
     pdf.set_font('DejaVu', '', 14)
     if len(offline) > 0:
         pdf.cell(200, 10, 'Не выходят на связь более 30 минут:', 0, 1, "C")
-        pdf.set_font('DejaVu', '', 12)
-        pdf.cell(200, 10, ', '.join(offline), 0, 1, "C")
+        pdf.set_font('DejaVu', '', 10)
+        pdf.cell(200, 10, ', '.join(offline), 0, 1, "L")
     else:
         pdf.cell(200, 10, 'Все наблюдаемые паркоматы вышли на связь.', 0, 1, "C")
     # API, devices
     w = pdf.w / 13
     h = pdf.font_size * 1.4
-    pdf.set_font('DejaVu', '', 12)
-    pdf.multi_cell(w * 2, h, "Паркомат №", 1, 0, 'C')
-    pdf.multi_cell(w, h, "Монетник", 1, 0, 'C')
-    pdf.multi_cell(w, h, "Купюрник", 1, 0, 'C')
-    pdf.multi_cell(w * 8, h, "API", 1, 0, 'C')
+    pdf.set_font('DejaVu', '', 10)
+    pdf.cell(w, h, "№", 1, 0, 'C')
+    pdf.cell(w, h, "Мон.", 1, 0, 'C')
+    pdf.cell(w, h, "Куп.", 1, 0, 'C')
+    pdf.cell(w * 8, h, "API", 1, 0, 'C')
     pdf.ln(h)
     for p in status.keys():
         if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':
-            pdf.multi_cell(w * 2, h, str(p), 1, 0, 'R')
-            pdf.multi_cell(w, h, status[p]['coin'], 1, 0, 'C')
-            pdf.multi_cell(w, h, status[p]['validator'], 1, 0, 'C')
-            pdf.multi_cell(w * 8, h, str(status[p]['API']), 1, 0, 'L')
+            pdf.cell(w * 2, h, str(p), 1, 0, 'R')
+            pdf.cell(w, h, status[p]['coin'], 1, 0, 'C')
+            pdf.cell(w, h, status[p]['validator'], 1, 0, 'C')
+            pdf.cell(w * 8, h, str(status[p]['API']), 1, 0, 'L')
             pdf.ln(h)
     # footer
     pdf.set_font('DejaVu', '', 8)

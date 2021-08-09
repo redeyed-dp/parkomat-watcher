@@ -6,7 +6,7 @@ from datetime import datetime
 @click.argument("n")
 def report(n):
     d = datetime.now()
-    name = f"Отчет {d.year}.{str.zfill(str(d.month), 2)}.{str.zfill(str(d.day), 2)}.{str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}"
+    name = f"Отчет {d.year}.{str.zfill(str(d.month), 2)}.{str.zfill(str(d.day), 2)} {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}"
     if n == "evening":
         name += ' (вечерний)'
         from app.reports.report import evening_report
