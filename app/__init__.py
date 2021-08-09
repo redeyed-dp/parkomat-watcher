@@ -27,3 +27,6 @@ from app.reports import bp as reports
 app.register_blueprint(reports, url_prefix='/reports')
 
 from app import views
+
+# Command line interface
+from app import cli
