@@ -70,7 +70,7 @@ def morning_report(name):
             pdf.cell(w * 2, h, str(p), 1, 0, 'R')
             pdf.cell(w, h, status[p]['coin'], 1, 0, 'C')
             pdf.cell(w, h, status[p]['validator'], 1, 0, 'C')
-            pdf.cell(w * 8, h, str(status[p]['API']), 1, 0, 'L')
+            pdf.cell(w * 8, h, str(status[p]['api']), 1, 0, 'L')
             pdf.ln(h)
     # footer
     pdf.set_font('DejaVu', '', 8)
