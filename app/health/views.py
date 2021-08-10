@@ -3,6 +3,7 @@ from app.health import bp
 from app.health.models import Health
 from app.catalog.models import Parkomat
 from app.health.forms import DayForm
+from app.health.alarm import alarm
 from flask import render_template, request, Response
 from flask_login import login_required
 from datetime import datetime
@@ -137,4 +138,7 @@ def api():
         )
         db.session.add(health)
         db.session.commit()
+        # обработчик тревожных событий
+        if True:
+            alarm(host, data)
     return Response(status=200)

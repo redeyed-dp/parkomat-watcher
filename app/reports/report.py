@@ -65,7 +65,7 @@ def morning_report(name):
     pdf.cell(w, h, "№", 1, 0, 'C')
     pdf.cell(w, h, "Мон.", 1, 0, 'C')
     pdf.cell(w, h, "Куп.", 1, 0, 'C')
-    pdf.cell(w * 8, h, "API", 1, 0, 'C')
+    pdf.cell(w * 9, h, "API", 1, 0, 'C')
     pdf.ln(h)
     for p in status.keys():
         if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':

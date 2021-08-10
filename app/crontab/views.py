@@ -15,6 +15,9 @@ def index():
         config['morning_report'] = form.morning_report.data
         config['evening_report'] = form.evening_report.data
         config['check_cert'] = form.check_cert.data
+        config['alarm_hdd'] = form.alarm_hdd.data
+        config['alarm_usb'] = form.alarm_usb.data
+        config['alarm_offline'] = form.alarm_offline.data
         Config.write(config)
         flash("Настройки сохранены")
         return redirect(url_for('cron.index'))
@@ -23,5 +26,8 @@ def index():
     form.morning_report.data = config.get('morning_report')
     form.evening_report.data = config.get('evening_report')
     form.check_cert.data = config.get('check_cert')
+    form.alarm_hdd.data = config.get('alarm_hdd')
+    form.alarm_usb.data = config.get('alarm_usb')
+    form.alarm_offline.data = config.get('alarm_offline')
     return render_template("crontab.html", form=form)
 

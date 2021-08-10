@@ -36,6 +36,21 @@
                 <div class="col-1">{{ form.check_cert(class="form-control form-control-sm") }}</div>
             </div>
 
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.alarm_offline.label(class="form-control-label col-form-label-sm col-4") }}
+                <div class="col-1">{{ form.alarm_offline(class="form-control form-control-sm") }}</div>
+            </div>
+
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.alarm_hdd.label(class="form-control-label col-form-label-sm col-4") }}
+                <div class="col-1">{{ form.alarm_hdd(class="form-control form-control-sm") }}</div>
+            </div>
+
+            <div class="form-group row border pt-4 pb-4">
+                {{ form.alarm_usb.label(class="form-control-label col-form-label-sm col-4") }}
+                <div class="col-1">{{ form.alarm_usb(class="form-control form-control-sm") }}</div>
+            </div>
+
             <div class="form-group row">
                 <div class="col-12 text-center p-1">
                     {{ form.submit(class="btn btn-primary") }}

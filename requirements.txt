@@ -8,6 +8,7 @@ Flask==2.0.1
 Flask-Bootstrap4==4.0.2
 flask-crontab==0.1.2
 Flask-Login==0.5.0
+flask-redis==0.4.0
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.15.1
 fpdf==1.7.2
@@ -25,6 +26,7 @@ PyMySQL==1.0.2
 pyparsing==2.4.7
 python-dateutil==2.8.2
 PyYAML==5.4.1
+redis==3.5.3
 requests==2.26.0
 six==1.16.0
 soupsieve==2.2.1

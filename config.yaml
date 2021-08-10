@@ -1,3 +1,6 @@
+alarm_hdd: true
+alarm_offline: true
+alarm_usb: true
 check_cert: true
 clear_db: true
 clear_db_days: 3

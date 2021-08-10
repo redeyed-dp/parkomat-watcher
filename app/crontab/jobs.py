@@ -1,8 +1,9 @@
 from app.crontab import crontab
 from app.lib.config import Config
 from app.lib.telegram import tg_send_message, tg_send_file
-from app import db
+from app import db, redis
 from app.health.models import Health
+from app.catalog.models import Parkomat
 from sqlalchemy import delete
 from datetime import datetime, timedelta
 
@@ -52,3 +53,17 @@ def evening():
         name = f"Отчет {str.zfill(str(d.day), 2)}.{str.zfill(str(d.month), 2)}.{d.year} (вечер)"
         evening_report(name)
         tg_send_file(f"app/static/reports/{name}.pdf")
+
+@crontab.job()
+def offline_alarm():
+    config = Config.read()
+    if config.get('alarm_offline'):
+        observed = Parkomat.observed()
+        for p in observed:
+            timeout = int(datetime.now().timestamp()) - redis.hget(p, 'lastmessage')
+            if timeout > 15*60 and not redis.hget(p, 'offline'):
+                tg_send_message(f"Паркомат {p} оффлайн более 15 минут.")
+                redis.hset(p, 'offline', 1)
+            elif timeout < 15*60 and redis.hget(p, 'offline'):
+                tg_send_message(f"Паркомат {p} теперь онлайн.")
+                redis.hdel(p, 'offline')
