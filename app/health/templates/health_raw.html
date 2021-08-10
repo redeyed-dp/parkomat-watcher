@@ -54,9 +54,9 @@
                     {% endif %}
 
                     {% if ns.uptime < i.uptime %}
-                        <td>{{ i.uptime }}</td>
+                        <td>{{ i.pretty_uptime() }}</td>
                     {% else %}
-                        <td class="bg-primary">{{ i.uptime }}</td>
+                        <td class="bg-primary">{{ i.pretty_uptime() }}</td>
                         {% set ns.reboots = ns.reboots + 1 %}
                     {% endif %}
                     {% set ns.uptime = i.uptime %}

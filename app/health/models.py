@@ -31,6 +31,19 @@ class Health(db.Model):
     log = db.Column(db.Text)
     api = db.Column(db.Text)
 
+    def pretty_uptime(self):
+        sec = self.uptime % 60
+        min = self.uptime // 60
+        hour = 0
+        if min > 60:
+            hour = min // 60
+            min = min % 60
+        if hour < 24:
+            return f"{str.zfill(str(hour), 2)}:{str.zfill(str(min), 2)}"
+        day = hour // 24
+        hour = hour % 24
+        return f"{str(day)} дн. {str.zfill(str(hour), 2)}:{str.zfill(str(min), 2)}"
+
     @staticmethod
     def dayStat(host, year, month, day):
         return db.session.query(Health).filter(and_(Health.host == host,

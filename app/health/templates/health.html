@@ -27,7 +27,7 @@
         {% if current is not none %}
         <div class="row">
             <div class="col-3">Снято</div><div class="col-3">{{ current.probed }}</div>
-            <div class="col-3">Аптайм</div><div class="col-3">{{ current.uptime }}</div>
+            <div class="col-3">Аптайм</div><div class="col-3">{{ current.pretty_uptime() }}</div>
         </div>
         <div class="row">
             <div class="col-3">Отправлено</div><div class="col-3">{{ current.received }}</div>
