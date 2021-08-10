@@ -21,7 +21,7 @@ def alarm(host, data):
             tg_send_message(f"Паркомат {host}. Проблема с жестким диском устранена.")
 
     # Coin USB port
-    if not data.get('coin'):
+    if not data.get('usb').get('coin'):
         if not redis.hget(host, 'coin'):
             redis.hset(host, 'coin', 1)
         else:
@@ -35,7 +35,7 @@ def alarm(host, data):
         redis.hdel(host, 'coin')
 
     # Validator USB port
-    if not data.get('validator'):
+    if not data.get('usb').get('validator'):
         if not redis.hget(host, 'validator'):
             redis.hset(host, 'validator', 1)
         else:
