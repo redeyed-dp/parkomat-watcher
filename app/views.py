@@ -44,7 +44,16 @@ def admins():
         admin.set_password(form.password.data)
         db.session.add(admin)
         db.session.commit()
-        flash("Добавлен администратор {}".format(admin.login))
+        flash(f"Добавлен администратор { admin.login }")
         return redirect(url_for("admins"))
     admins = db.session.query(Admin).all()
     return render_template("admins.html", admins=admins, form=form)
+
+@app.route("/admins/del/<int:id>")
+@login_required
+def admins_del(id):
+    admin = db.session.query(Admin).filter(Admin.id==id).one()
+    db.session.delete(admin)
+    db.session.commit()
+    flash(f"Учетная запись администратора { admin.login } удалена")
+    return redirect(url_for("admins"))

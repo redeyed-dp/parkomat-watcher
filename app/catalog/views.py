@@ -12,10 +12,14 @@ from flask_login import login_required
 def index():
     form = AddParkomatForm()
     if form.validate_on_submit():
+        exists = db.session.query(Parkomat).filter(Parkomat.id == form.id.data).one()
+        if exists:
+            flash(f"Паркомат { form.id.data } уже есть в реестре")
+            return redirect(url_for("catalog.index"))
         parkomat = Parkomat(id=form.id.data, enabled=True)
         db.session.add(parkomat)
         db.session.commit()
-        flash("Паркомат {} добавлен в мониторинг".format(form.id.data))
+        flash(f"Паркомат { form.id.data } добавлен в мониторинг")
         return redirect(url_for("catalog.index"))
     parkomats = db.session.query(Parkomat).order_by(Parkomat.id).all()
     return render_template("catalog.html", parkomats=parkomats, form=form)
@@ -26,7 +30,7 @@ def delete(id):
     db.session.execute(delete(Parkomat).where(Parkomat.id == id))
     db.session.execute(delete(Health).where(Health.host == id))
     db.session.commit()
-    flash("Паркомат {} удален".format(id))
+    flash(f"Паркомат { id } удален")
     return redirect(url_for("catalog.index"))
 
 @bp.route("/disable/<int:id>")
@@ -35,7 +39,7 @@ def disable(id):
     parkomat = db.session.query(Parkomat).filter(Parkomat.id==id).one()
     parkomat.enabled = False
     db.session.commit()
-    flash("Отключен монаторинг паркомата {}".format(id))
+    flash(f"Отключен монаторинг паркомата { id }")
     return redirect(url_for("catalog.index"))
 
 @bp.route("/enable/<int:id>")
@@ -44,5 +48,5 @@ def enable(id):
     parkomat = db.session.query(Parkomat).filter(Parkomat.id==id).one()
     parkomat.enabled = True
     db.session.commit()
-    flash("Включен мониторинг паркомата {}".format(id))
+    flash(f"Включен мониторинг паркомата { id }")
     return redirect(url_for("catalog.index"))

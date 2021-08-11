@@ -29,7 +29,9 @@
                     <td>{{ admin.login }}</td>
                     <td>{{ admin.name }}</td>
                     <td>
-добавить удаление, изменение пароля
+                        <a class="btn btn-sm" href="{{ url_for('admins_del', id=admin.id) }}" onclick="confirm('Удалить аккаунт {{ admin.login }} ?')">
+                            <img src="{{ url_for('static', filename='img/delete.png') }}" title="Удалить аккаунт">
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
