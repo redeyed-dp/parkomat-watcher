@@ -17,7 +17,8 @@ def morning_report(name):
     status = {}
     parkomats = Parkomat.observed()
     old = datetime.now() - timedelta(minutes=30)
-    for p in parkomats:
+    for parkomat in parkomats:
+        p = parkomat.id
         # Офлайн - не выходили на связь более 30 минут
         count = db.session.query(Health).filter(and_(Health.host == p, Health.received > old)).count()
         if count == 0:
@@ -30,16 +31,33 @@ def morning_report(name):
                 status[p]['api'] = lastprobe.api
             else:
                 status[p]['api'] = 'OK'
-            c = db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
-            if c > 10:
-                status[p]['coin'] = 'ERROR'
+
+            if parkomat.coin:
+                c = db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
+                if c > 10:
+                    status[p]['coin'] = 'ERROR'
+                else:
+                    status[p]['coin'] = 'OK'
             else:
-                status[p]['coin'] = 'OK'
-            v =  db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
-            if v > 10:
-                status[p]['validator'] = 'ERROR'
+                status[p]['coin'] = 'N/A'
+
+            if parkomat.validator:
+                v =  db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.coin == False)).count()
+                if v > 10:
+                    status[p]['validator'] = 'ERROR'
+                else:
+                    status[p]['validator'] = 'OK'
             else:
-                status[p]['validator'] = 'OK'
+                status[p]['validator'] = 'N/A'
+
+            if parkomat.nfc:
+                n = db.session.query(Health).filter(and_(Health.host == p, Health.probed > old, Health.nfc == False)).count()
+                if n > 10:
+                    status[p]['nfc'] = 'ERROR'
+                else:
+                    status[p]['nfc'] = 'OK'
+            else:
+                status[p]['nfc'] = 'N/A'
 
     pdf = fpdf.FPDF()
     pdf.add_page()
@@ -65,14 +83,16 @@ def morning_report(name):
     pdf.cell(w, h, "№", 1, 0, 'C')
     pdf.cell(w, h, "Мон.", 1, 0, 'C')
     pdf.cell(w, h, "Куп.", 1, 0, 'C')
-    pdf.cell(w * 9, h, "API", 1, 0, 'C')
+    pdf.cell(w, h, "NFC", 1, 0, 'C')
+    pdf.cell(w * 8, h, "API", 1, 0, 'C')
     pdf.ln(h)
     for p in status.keys():
-        if status[p]['api'] != 'ok' or status[p]['coin'] != 'OK' or status[p]['validator'] != 'OK':
+        if status[p]['api'] != 'OK' or status[p]['coin'] == 'ERROR' or status[p]['validator'] == 'ERROR' or status[p]['nfc'] == 'ERROR':
             pdf.cell(w, h, str(p), 1, 0, 'R')
             pdf.cell(w, h, status[p]['coin'], 1, 0, 'C')
             pdf.cell(w, h, status[p]['validator'], 1, 0, 'C')
-            pdf.cell(w * 9, h, str(status[p]['api']), 1, 0, 'L')
+            pdf.cell(w, h, status[p]['nfc'], 1, 0, 'C')
+            pdf.cell(w * 8, h, str(status[p]['api']), 1, 0, 'L')
             pdf.ln(h)
     # footer
     pdf.set_font('DejaVu', '', 8)
@@ -82,7 +102,7 @@ def morning_report(name):
 
 def evening_report(name):
     d = datetime.now()
-    observed = Parkomat.observed()
+    observed = Parkomat.observed_numbers()
     usb = dict()
     drive = []
     for p in observed:

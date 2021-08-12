@@ -3,7 +3,14 @@ from app.lib.telegram import tg_send_message
 from app.lib.config import Config
 from datetime import datetime
 
-def alarm(host, data):
+def alarm(message):
+    now = datetime.now()
+    start = now.replace(hour=8, minute=10, second=0)
+    stop = now.replace(hour=19, minute=50, second=0)
+    if now > start and now < stop:
+        tg_send_message(message)
+
+def analyzer(host, data):
     config = Config.read()
     # when last message received
     redis.hset(host, 'lastmessage', int(datetime.now().timestamp()))
@@ -12,13 +19,13 @@ def alarm(host, data):
     if config.get('alarm_hdd'):
         if data.get('hdd') == 0 and not redis.hget(host, 'hdd'):
             redis.hset(host, 'hdd', 'disconnect')
-            tg_send_message(f"Паркомат {host}. Отпадание жесткого диска.")
+            alarm(f"Паркомат { host }. Отпадание жесткого диска.")
         elif data.get('hdd') > 99 and not redis.hget(host, 'hdd'):
             redis.hset(host, 'hdd', 'full')
-            tg_send_message(f"Паркомат {host}. Жесткий диск заполнен на {data.get('hdd')}%")
+            alarm(f"Паркомат { host }. Жесткий диск заполнен на {data.get('hdd')}%")
         elif data.get('hdd') > 0 and data.get('hdd') < 99 and redis.hget(host, 'hdd'):
             redis.hdel(host, 'hdd')
-            tg_send_message(f"Паркомат {host}. Проблема с жестким диском устранена.")
+            alarm(f"Паркомат { host }. Проблема с жестким диском устранена.")
 
     # Coin USB port
     if not data.get('usb').get('coin'):
@@ -28,10 +35,10 @@ def alarm(host, data):
             c = int(redis.hget(host, 'coin'))
             redis.hset(host, 'coin', c+1)
         if int(redis.hget(host, 'coin')) == 15 and config.get('alarm_usb'):
-            tg_send_message(f"Паркомат {host}. Отпал монетоприемник.")
+            alarm(f"Паркомат { host }. Отпал монетоприемник.")
     elif redis.hget(host, 'coin'):
         if int(redis.hget(host, 'coin')) >= 15 and config.get('alarm_usb'):
-            tg_send_message(f"Паркомат {host}. Монетоприемник подключен.")
+            alarm(f"Паркомат { host }. Монетоприемник подключен.")
         redis.hdel(host, 'coin')
 
     # Validator USB port
@@ -42,9 +49,9 @@ def alarm(host, data):
             v = int(redis.hget(host, 'validator'))
             redis.hset(host, 'validator', v+1)
         if int(redis.hget(host, 'validator')) == 15 and config.get('alarm_usb'):
-            tg_send_message(f"Паркомат {host}. Отпал купюроприемник.")
+            alarm(f"Паркомат { host }. Отпал купюроприемник.")
     elif redis.hget(host, 'validator'):
         if int(redis.hget(host, 'validator')) >= 15 and config.get('alarm_usb'):
-            tg_send_message(f"Паркомат {host}. Купюроприемник подключен.")
+            alarm(f"Паркомат { host }. Купюроприемник подключен.")
         redis.hdel(host, 'validator')
 

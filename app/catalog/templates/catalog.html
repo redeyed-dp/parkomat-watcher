@@ -20,7 +20,7 @@
                 <tr>
                     <th>Номер паркомата</th>
                     <th colspan="2">Мониторинг</th>
-                    <th>Действия</th>
+                    <th colspan="2">Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,6 +49,11 @@
                                 <img src="{{ url_for('static', filename='img/enable.png') }}" title="Включить мониторинг">
                             </a>
                         {% endif %}
+                        <a class="btn btn-sm" href="{{ url_for('catalog.edit', id=parkomat.id) }}">
+                            <img src="{{ url_for('static', filename='img/config.png') }}" title="Настроить">
+                        </a>
+                    </td>
+                    <td>
                         <a class="btn btn-sm" href="{{ url_for('catalog.delete', id=parkomat.id) }}">
                             <img src="{{ url_for('static', filename='img/delete.png') }}" title="УДАЛИТЬ">
                         </a>

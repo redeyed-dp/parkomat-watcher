@@ -1,0 +1,12 @@
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+
+<div class="row">
+    <div class="col-8 offset-2">
+        <h3>Паркомат {{ id }}. Установленные USB устройства</h3>
+        <hr>
+        {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('sm', 1, 11)) }}
+    </div>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@ from app.health import bp
 from app.health.models import Health
 from app.catalog.models import Parkomat
 from app.health.forms import DayForm
-from app.health.alarm import alarm
+from app.health.alarm import analyzer
 from flask import render_template, request, Response
 from flask_login import login_required
 from datetime import datetime
@@ -24,11 +24,12 @@ def graph(host):
     else:
         (year, month, day) = form.getNow()
         form.setNow()
+    parkomat = db.session.query(Parkomat).filter(Parkomat.id==host).one()
     current = db.session.query(Health).filter(Health.host==host).order_by(Health.id.desc()).first()
     health = Health.dayStat(host=host, year=year, month=month, day=day)
     count = len(health)
     counters = Health.counters(health)
-    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current, count=count, counters=counters)
+    return render_template("health.html", host=host, year=year, month=month, day=day, form=form, current=current, count=count, counters=counters, parkomat=parkomat)
 
 @bp.route("/<int:host>/<int:year>/<int:month>/<int:day>/<param>.png")
 def draw(host, year, month, day, param):
@@ -140,5 +141,5 @@ def api():
         db.session.commit()
         # обработчик тревожных событий
         if True:
-            alarm(host, data)
+            analyzer(host, data)
     return Response(status=200)

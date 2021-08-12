@@ -34,32 +34,32 @@
         </div>
         <h4 class="p-2">Периферия USB</h4>
         <div class="row">
-            {% if current.coin %} {% set bgcoin = '' %} {% else %} {% set bgcoin = 'bg-danger' %} {% endif %}
+            {% if current.coin %} {% set bgcoin = '' %} {% elif parkomat.coin %} {% set bgcoin = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgcoin }}">
                 <img src="{{ url_for('static', filename='img/coin.png') }}"><br>
                 Монетоприемник <br>
-                {% if current.coin %} OK {% else %} Не подключен {% endif %}
+                {% if current.coin %} OK {% elif parkomat.coin %} Ошибка {% else %} Не установлен {% endif %}
             </div>
 
-            {% if current.validator %} {% set bgval = '' %} {% else %} {% set bgval = 'bg-danger' %} {% endif %}
+            {% if current.validator %} {% set bgval = '' %} {% elif parkomat.validator %} {% set bgval = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgval }}">
                 <img src="{{ url_for('static', filename='img/validator.png') }}"><br>
                 Купюроприемник <br>
-                {% if current.validator %} OK {% else %} Не подключен {% endif %}
+                {% if current.validator %} OK {% elif parkomat.validator %} Ошибка {% else %} Не установлен {% endif %}
             </div>
 
-            {% if current.nfc %} {% set bgnfc = '' %} {% else %} {% set bgnfc = 'bg-danger' %} {% endif %}
+            {% if current.nfc %} {% set bgnfc = '' %} {% elif parkomat.nfc %} {% set bgnfc = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgnfc }}">
                 <img src="{{ url_for('static', filename='img/nfc.png') }}"><br>
                 NFC <br>
-                {% if current.nfc %} OK {% else %} Не подключен {% endif %}
+                {% if current.nfc %} OK {% elif parkomat.nfc %} Ошибка {% else %} Не установлен {% endif %}
             </div>
 
             {% if current.printer %} {% set bgprn = '' %} {% else %} {% set bgprn = 'bg-danger' %} {% endif %}
             <div class="col-3 text-center p-2 {{ bgprn }}">
                 <img src="{{ url_for('static', filename='img/printer.png') }}"><br>
                 Принтер <br>
-                {% if current.printer %} OK {% else %} Не подключен {% endif %}
+                {% if current.printer %} OK {% else %} Ошибка {% endif %}
             </div>
         </div>
 
