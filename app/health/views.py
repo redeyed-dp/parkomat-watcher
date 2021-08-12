@@ -108,7 +108,7 @@ def sheet(host):
 @login_required
 def current():
     health = []
-    for p in Parkomat.observed():
+    for p in Parkomat.observed_numbers():
         probe = db.session.query(Health).filter(Health.host==p).order_by(Health.id.desc()).first()
         if probe is not None:
             health.append(probe)
