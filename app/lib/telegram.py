@@ -4,6 +4,7 @@ import requests
 def tg_send_message(message):
     requests.get(f"https://api.telegram.org/bot{app.config['TELEGRAM_TOKEN']}/sendMessage",
         params = {
+            'parse_mode': 'html',
             'chat_id': app.config['TELEGRAM_CHAT_ID'],
             'text': message
         }

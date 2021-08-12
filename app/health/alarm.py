@@ -19,13 +19,13 @@ def analyzer(host, data):
     if config.get('alarm_hdd'):
         if data.get('hdd') == 0 and not redis.hget(host, 'hdd'):
             redis.hset(host, 'hdd', 'disconnect')
-            alarm(f"Паркомат { host }. Отпадание жесткого диска.")
+            alarm(f"⚠️ <b> Паркомат { host }. Отпадание жесткого диска.</b>")
         elif data.get('hdd') > 99 and not redis.hget(host, 'hdd'):
             redis.hset(host, 'hdd', 'full')
-            alarm(f"Паркомат { host }. Жесткий диск заполнен на {data.get('hdd')}%")
+            alarm(f"⚠️ <b> Паркомат { host }. Жесткий диск заполнен на {data.get('hdd')}% </b>")
         elif data.get('hdd') > 0 and data.get('hdd') < 99 and redis.hget(host, 'hdd'):
             redis.hdel(host, 'hdd')
-            alarm(f"Паркомат { host }. Проблема с жестким диском устранена.")
+            alarm(f"✅ Паркомат { host }. Проблема с жестким диском устранена.")
 
     # Coin USB port
     if not data.get('usb').get('coin'):
@@ -35,10 +35,10 @@ def analyzer(host, data):
             c = int(redis.hget(host, 'coin'))
             redis.hset(host, 'coin', c+1)
         if int(redis.hget(host, 'coin')) == 15 and config.get('alarm_usb'):
-            alarm(f"Паркомат { host }. Отпал монетоприемник.")
+            alarm(f"⚠️ Паркомат { host }. Отпал монетоприемник.")
     elif redis.hget(host, 'coin'):
         if int(redis.hget(host, 'coin')) >= 15 and config.get('alarm_usb'):
-            alarm(f"Паркомат { host }. Монетоприемник подключен.")
+            alarm(f"✅ Паркомат { host }. Монетоприемник подключен.")
         redis.hdel(host, 'coin')
 
     # Validator USB port
@@ -49,9 +49,9 @@ def analyzer(host, data):
             v = int(redis.hget(host, 'validator'))
             redis.hset(host, 'validator', v+1)
         if int(redis.hget(host, 'validator')) == 15 and config.get('alarm_usb'):
-            alarm(f"Паркомат { host }. Отпал купюроприемник.")
+            alarm(f"⚠️ Паркомат { host }. Отпал купюроприемник.")
     elif redis.hget(host, 'validator'):
         if int(redis.hget(host, 'validator')) >= 15 and config.get('alarm_usb'):
-            alarm(f"Паркомат { host }. Купюроприемник подключен.")
+            alarm(f"✅ Паркомат { host }. Купюроприемник подключен.")
         redis.hdel(host, 'validator')
 

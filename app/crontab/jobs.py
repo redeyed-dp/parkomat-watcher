@@ -31,7 +31,7 @@ def check_cert():
         from app.crontab.check_certificates import get_current_version, get_old_version, save_current_version
         new = get_current_version()
         if new and new > get_old_version():
-            tg_send_message("Доступны новые сертификаты на сайте https://iit.com.ua/downloads")
+            tg_send_message("‼️ <b> Доступны новые сертификаты на сайте </b><a href='https://iit.com.ua/downloads'>https://iit.com.ua/downloads</a> ‼️")
             save_current_version(new)
 
 @crontab.job(minute="30", hour="7")
@@ -62,8 +62,8 @@ def offline_alarm():
         for p in observed:
             timeout = int(datetime.now().timestamp()) - redis.hget(p, 'lastmessage')
             if timeout > 15*60 and not redis.hget(p, 'offline'):
-                tg_send_message(f"Паркомат {p} оффлайн более 15 минут.")
+                tg_send_message(f"⚠️ <b>Паркомат {p} оффлайн более 15 минут.</b>")
                 redis.hset(p, 'offline', 1)
             elif timeout < 15*60 and redis.hget(p, 'offline'):
-                tg_send_message(f"Паркомат {p} теперь онлайн.")
+                tg_send_message(f"✅ <b>Паркомат {p} теперь онлайн.</b>")
                 redis.hdel(p, 'offline')
