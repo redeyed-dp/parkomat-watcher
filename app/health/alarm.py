@@ -1,14 +1,7 @@
 from app import redis
-from app.lib.telegram import tg_send_message
+from app.lib.telegram import alarm
 from app.lib.config import Config
 from datetime import datetime
-
-def alarm(message):
-    now = datetime.now()
-    start = now.replace(hour=8, minute=10, second=0)
-    stop = now.replace(hour=19, minute=50, second=0)
-    if now > start and now < stop:
-        tg_send_message(message)
 
 def analyzer(host, data):
     config = Config.read()

@@ -1,6 +1,6 @@
 from app.crontab import crontab
 from app.lib.config import Config
-from app.lib.telegram import tg_send_message, tg_send_file
+from app.lib.telegram import alarm, tg_send_message, tg_send_file
 from app import db, redis
 from app.health.models import Health
 from app.catalog.models import Parkomat
@@ -62,8 +62,8 @@ def offline_alarm():
         for p in observed:
             timeout = int(datetime.now().timestamp()) - redis.hget(p, 'lastmessage')
             if timeout > 15*60 and not redis.hget(p, 'offline'):
-                tg_send_message(f"⚠️ <b>Паркомат {p} оффлайн более 15 минут.</b>")
+                alarm(f"⚠️ <b>Паркомат {p} оффлайн более 15 минут.</b>")
                 redis.hset(p, 'offline', 1)
             elif timeout < 15*60 and redis.hget(p, 'offline'):
-                tg_send_message(f"✅ <b>Паркомат {p} теперь онлайн.</b>")
+                alarm(f"✅ <b>Паркомат {p} теперь онлайн.</b>")
                 redis.hdel(p, 'offline')
