@@ -31,7 +31,7 @@
             <tbody>
             {% for i in health %}
                 <tr>
-                    <td>{{ i.host }}</td>
+                    <td><a href="{{ url_for('health.graph', host=i.host) }}">{{ i.host }}</a></td>
                     <td>{{ i.received }}</td>
                     <td>{{ i.probed }}</td>
 
@@ -53,10 +53,35 @@
 
 {# Монетник, купюрник, НФЦ, принтер - булевые значения #}
 
-                    {% if i.coin %}      <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
-                    {% if i.validator %} <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
-                    {% if i.nfc %}       <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
-                    {% if i.printer %}   <td class="bg-success">+</td> {% else %} <td class="bg-danger">-</td> {% endif %}
+                    {% if i.coin %}
+                        <td class="bg-success text-center">+</td>
+                    {% elif device[i.host]['coin'] %}
+                        <td class="bg-danger text-center">-</td>
+                    {% else %}
+                        <td class="text-center"> N/A</td>
+                    {% endif %}
+
+                    {% if i.validator %}
+                        <td class="bg-success text-center">+</td>
+                    {% elif device[i.host]['validator'] %}
+                        <td class="bg-danger text-center">-</td>
+                    {% else %}
+                        <td class="text-center">N/A</td>
+                    {% endif %}
+
+                    {% if i.nfc %}
+                        <td class="bg-success text-center">+</td>
+                    {% elif device[i.host]['nfc'] %}
+                        <td class="bg-danger text-center">-</td>
+                    {% else %}
+                        <td class="text-center">N/A</td>
+                    {% endif %}
+
+                    {% if i.printer %}
+                        <td class="bg-success text-center">+</td>
+                    {% else %}
+                        <td class="bg-danger text-center">-</td>
+                    {% endif %}
 
 {# Журнал скрыт по умолчанию #}
 

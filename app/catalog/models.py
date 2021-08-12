@@ -19,3 +19,13 @@ class Parkomat(db.Model):
     def observed():
         parkomats = db.session.query(Parkomat.id).filter(Parkomat.enabled == True).order_by(Parkomat.id).all()
         return parkomats
+
+    @staticmethod
+    def device_configs():
+        devices = {}
+        parkomats = db.session.query(Parkomat).filter(Parkomat.enabled == True).order_by(Parkomat.id).all()
+        for parkomat in parkomats:
+            devices[parkomat.id] = {}
+            for dev in ('coin', 'validator', 'nfc'):
+                devices[parkomat.id][dev] = getattr(parkomat, dev)
+        return devices

@@ -108,11 +108,12 @@ def sheet(host):
 @login_required
 def current():
     health = []
+    device = Parkomat.device_configs()
     for p in Parkomat.observed_numbers():
         probe = db.session.query(Health).filter(Health.host==p).order_by(Health.id.desc()).first()
         if probe is not None:
             health.append(probe)
-    return render_template("health_current.html", health=health)
+    return render_template("health_current.html", health=health, device=device)
 
 @bp.route("/api", methods=['POST'])
 def api():
