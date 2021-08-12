@@ -12,8 +12,8 @@ from flask_login import login_required
 def index():
     form = AddParkomatForm()
     if form.validate_on_submit():
-        exists = db.session.query(Parkomat).filter(Parkomat.id == form.id.data).one()
-        if exists:
+        exists = db.session.query(Parkomat).filter(Parkomat.id == form.id.data).count()
+        if exists > 0:
             flash(f"Паркомат { form.id.data } уже есть в реестре")
             return redirect(url_for("catalog.index"))
         parkomat = Parkomat(id=form.id.data, enabled=True, coin=True, validator=True, nfc=True)
