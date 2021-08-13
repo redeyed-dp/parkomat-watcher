@@ -30,4 +30,3 @@ def index():
     form.alarm_usb.data = config.get('alarm_usb')
     form.alarm_offline.data = config.get('alarm_offline')
     return render_template("crontab.html", form=form)
-

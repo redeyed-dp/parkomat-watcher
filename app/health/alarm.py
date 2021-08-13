@@ -47,4 +47,3 @@ def analyzer(host, data):
         if int(redis.hget(host, 'validator')) >= 15 and config.get('alarm_usb'):
             alarm(f"✅ Паркомат { host }. Купюроприемник подключен.")
         redis.hdel(host, 'validator')
-
