@@ -108,12 +108,10 @@ def evening_report(name):
     for p in observed:
         health = Health.dayStat(host=p, year=d.year, month=d.month, day=d.day)
         usb[p] = Health.counters(health)
-        hdd = False
         for h in health:
             if h.hdd == 0:
-                hdd = True
-        if hdd:
-            drive.append(str(p))
+                drive.append(str(p))
+                break
 
     pdf = fpdf.FPDF()
     pdf.add_page()
