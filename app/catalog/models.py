@@ -17,7 +17,7 @@ class Parkomat(db.Model):
 
     @staticmethod
     def observed():
-        parkomats = db.session.query(Parkomat.id).filter(Parkomat.enabled == True).order_by(Parkomat.id).all()
+        parkomats = db.session.query(Parkomat).filter(Parkomat.enabled == True).order_by(Parkomat.id).all()
         return parkomats
 
     @staticmethod
