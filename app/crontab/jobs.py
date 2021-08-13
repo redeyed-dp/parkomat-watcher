@@ -58,7 +58,7 @@ def evening():
 def offline_alarm():
     config = Config.read()
     if config.get('alarm_offline'):
-        observed = Parkomat.observed()
+        observed = Parkomat.observed_numbers()
         for p in observed:
             timeout = int(datetime.now().timestamp()) - redis.hget(p, 'lastmessage')
             if timeout > 15*60 and not redis.hget(p, 'offline'):
