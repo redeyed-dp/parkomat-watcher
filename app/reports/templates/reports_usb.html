@@ -13,20 +13,21 @@
         {{ wtf.quick_form(form, form_type="inline") }}
     </div>
     <div class="col-6 text-right">
-        <h3> Отпадания чего то там </h3>
+        {{ set devname = {'coin': 'монетоприемника', 'validator': 'купюроприемника', 'nfc': 'NFC Exellio', 'printer': 'Принтера'} }}
+        <h3> Рейтинг отпаданий {{ devname[device] }}</h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12">
         <table class="table table-sm table-hover border border-dark">
-            <thead>
+            <thead class="thead-dark">
             <tr>
-                <td>Паркомат</td>
+                <th>Паркомат</th>
                 {% for day in days %}
-                    <td>{{ day }}</td>
+                    <th>{{ day }}</th>
                 {% endfor %}
-                <td>Всего</td>
+                <th>Всего</th>
             </tr>
             </thead>
             {% for parkomat in drops %}

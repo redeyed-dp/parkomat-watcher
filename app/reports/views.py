@@ -34,7 +34,7 @@ def usb(device):
     else:
         (year, month) = form.getNow()
         form.setNow()
-    days = range(1, monthrange(year, month)[1])
+    days = range(1, monthrange(year, month)[1] + 1)
     drops = {}
     observed = Parkomat.observed_numbers()
     for p in observed:
@@ -46,4 +46,4 @@ def usb(device):
         for s in stat:
             drops[p][s.date.day] = getattr(s, device)
             drops[p]['total'] += getattr(s, device)
-    return render_template("reports_usb.html", form=form, days=days, drops=drops)
+    return render_template("reports_usb.html", form=form, days=days, drops=drops, device=device)
