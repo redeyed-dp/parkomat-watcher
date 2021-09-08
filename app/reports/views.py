@@ -30,7 +30,7 @@ def usb(device):
         return render_template("404.html")
     form = MonthForm()
     if form.validate_on_submit():
-        (year, month) = form.getDay()
+        (year, month) = form.getMonth()
     else:
         (year, month) = form.getNow()
         form.setNow()
