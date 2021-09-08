@@ -41,7 +41,7 @@ def usb(device):
         drops[p] = {'total': 0}
         stat = db.session.query(MonthReport).filter(and_(
                 extract('year', MonthReport.date) == year,
-                extract('month', MonthReport.probed) == month,
+                extract('month', MonthReport.date) == month,
                 MonthReport.host == p)).all()
         for s in stat:
             drops[p][s.date.day] = getattr(s, device)
