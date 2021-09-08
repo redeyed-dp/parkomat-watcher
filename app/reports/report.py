@@ -1,6 +1,7 @@
 from app import db
 from app.catalog.models import Parkomat
 from app.health.models import Health
+from app.reports.models import MonthReport
 from sqlalchemy import and_
 from datetime import datetime, timedelta
 import fpdf
@@ -100,10 +101,20 @@ def morning_report(name):
     pdf.output(f"app/static/reports/{name}.pdf")
 
 
+def usb_err_stat():
+    d = datetime.now()
+    observed = Parkomat.observed_numbers()
+    for p in observed:
+        health = Health.dayStat(host=p, year=d.year, month=d.month, day=d.day)
+        usb = Health.counters(health)
+        report = MonthReport(host=p, coin=usb['coin'], validator=usb['validator'], nfc=usb['nfc'], printer=usb['printer'])
+        db.session.add(report)
+        db.session.commit()
+
 def evening_report(name):
     d = datetime.now()
     observed = Parkomat.observed_numbers()
-    usb = dict()
+    usb = {}
     drive = []
     for p in observed:
         health = Health.dayStat(host=p, year=d.year, month=d.month, day=d.day)

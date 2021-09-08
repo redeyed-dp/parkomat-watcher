@@ -13,6 +13,10 @@
             <img src="{{ url_for('static', filename='img/heartbeat.png') }}"><br>
             Текущее состояне
         </a>
+        <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.usb_index') }}">
+            <img src="{{ url_for('static', filename='img/usb.png') }}"><br>
+            Топ глючных паркоматов
+        </a>
         <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.archive') }}">
             <img src="{{ url_for('static', filename='img/reports.png') }}"><br>
             Архив отчетов

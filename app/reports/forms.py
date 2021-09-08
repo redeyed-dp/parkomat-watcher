@@ -17,27 +17,23 @@ monthes = {
     12: 'декабрь'
 }
 
-class DayForm(FlaskForm):
+class MonthForm(FlaskForm):
     year = SelectField("Год", choices=['2021'], coerce=int)
     month = SelectField("Месяц", choices=[ (i, monthes[i]) for i in monthes.keys() ], coerce=int)
-    day = SelectField("День", choices=[(i, i) for i in range(1, 32)], coerce=int)
     submit = SubmitField("Показать")
 
-    def getDay(self):
+    def getMonth(self):
         year = self.year.data
         month = self.month.data
-        day = self.day.data
-        return (year, month, day)
+        return (year, month)
 
     def getNow(self):
         year = datetime.now().year
         month = datetime.now().month
-        day = datetime.now().day
-        return (year, month, day)
+        return (year, month)
 
     def setNow(self):
-        (year, month, day) = self.getNow()
+        (year, month) = self.getNow()
         self.year.default = year
         self.month.default = month
-        self.day.default = day
         self.process()

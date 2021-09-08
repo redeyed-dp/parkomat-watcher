@@ -44,6 +44,11 @@ def morning():
         morning_report(name)
         tg_send_file(f"app/static/reports/{name}.pdf")
 
+@crontab.job(minute="52", hour="19")
+def evening_stat():
+    from app.reports.report import usb_err_stat
+    usb_err_stat()
+
 @crontab.job(minute="55", hour="19")
 def evening():
     config = Config.read()

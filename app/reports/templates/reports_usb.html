@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+<div class="row m-4">
+    <div class="col-6">
+        {{ wtf.quick_form(form, form_type="inline") }}
+    </div>
+    <div class="col-6 text-right">
+        <h3> Отпадания чего то там </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-sm table-hover border border-dark">
+            <thead>
+            <tr>
+                <td>Паркомат</td>
+                {% for day in days %}
+                    <td>{{ day }}</td>
+                {% endfor %}
+                <td>Всего</td>
+            </tr>
+            </thead>
+            {% for parkomat in drops %}
+                <tr>
+                    <td>{{ parkomat }}</td>
+                    {% for day in days %}
+                        <td>{{ drops[parkomat][day] }}</td>
+                    {% endfor %}
+                    <td>{{ drops[parkomat]['total'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

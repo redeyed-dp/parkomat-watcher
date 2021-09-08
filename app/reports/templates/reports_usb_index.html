@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% block app_content %}
+<div class="row-fluid">
+    <div class="col-12 p-4">
+        <a class="btn btn-sm btn-light" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='img/back.png') }}"> Назад
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.usb', device='validator') }}">
+        <img src="{{ url_for('static', filename='img/validator.png') }}"><br>
+        По отпаданиям купюрника
+    </a>
+    <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.usb', device='coin') }}">
+        <img src="{{ url_for('static', filename='img/coin.png') }}"><br>
+        По отпаданиям монетника
+    </a>
+    <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.usb', device='nfc') }}">
+        <img src="{{ url_for('static', filename='img/nfc.png') }}"><br>
+        По отпаданиям NFC
+    </a>
+    <a class="btn btn-light col-2" role="button" href="{{ url_for('reports.usb', device='printer') }}">
+        <img src="{{ url_for('static', filename='img/printer.png') }}"><br>
+        По отпаданиям принтера
+    </a>
+</div>
+
+{% endblock %}
