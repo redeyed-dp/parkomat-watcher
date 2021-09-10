@@ -37,7 +37,7 @@
             </thead>
             {% for parkomat, totaldrops in total | dictsort(true, 'value', reverse=true) %}
                 <tr>
-                    <td class="text-light"> {{ parkomat }} </td>
+                    <td class="bg-dark text-light"> {{ parkomat }} </td>
 
                     {% for day in days %}
                         <td> {{ drops[parkomat][day] }} </td>
