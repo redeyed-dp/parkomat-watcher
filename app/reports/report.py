@@ -60,6 +60,7 @@ def morning_report(name):
             else:
                 status[p]['nfc'] = 'N/A'
 
+    ''' CREATING PDF REPORT '''
     pdf = fpdf.FPDF()
     pdf.add_page()
     pdf.add_font('DejaVu', '', '../font/DejaVuSerifCondensed.ttf', uni=True)
@@ -100,14 +101,14 @@ def morning_report(name):
     pdf.cell(200, 10, f"Документ сформирован в {str.zfill(str(d.hour), 2)}:{str.zfill(str(d.minute), 2)}:{str.zfill(str(d.second), 2)}", 0, 1, "L")
     pdf.output(f"app/static/reports/{name}.pdf")
 
-
+''' Day summary of USB device disconnects '''
 def usb_err_stat():
     d = datetime.now()
     observed = Parkomat.observed_numbers()
     for p in observed:
         health = Health.dayStat(host=p, year=d.year, month=d.month, day=d.day)
         usb = Health.counters(health)
-        report = MonthReport(host=p, coin=usb['coin'], validator=usb['validator'], nfc=usb['nfc'], printer=usb['printer'])
+        report = MonthReport(host=p, date=d, coin=usb['coin'], validator=usb['validator'], nfc=usb['nfc'], printer=usb['printer'])
         db.session.add(report)
         db.session.commit()
 
@@ -123,7 +124,7 @@ def evening_report(name):
             if h.hdd == 0:
                 drive.append(str(p))
                 break
-
+    ''' CREATING PDF REPORT '''
     pdf = fpdf.FPDF()
     pdf.add_page()
     pdf.add_font('DejaVu', '', '../font/DejaVuSerifCondensed.ttf', uni=True)
