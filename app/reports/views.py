@@ -37,13 +37,15 @@ def usb(device):
     days = range(1, monthrange(year, month)[1] + 1)
     drops = {}
     observed = Parkomat.observed_numbers()
+    total = {}
     for p in observed:
-        drops[p] = {'total': 0}
+        drops[p] = {}
+        total[p] = 0
         stat = db.session.query(MonthReport).filter(and_(
                 extract('year', MonthReport.date) == year,
                 extract('month', MonthReport.date) == month,
                 MonthReport.host == p)).all()
         for s in stat:
             drops[p][s.date.day] = getattr(s, device)
-            drops[p]['total'] += getattr(s, device)
-    return render_template("reports_usb.html", form=form, days=days, drops=drops, device=device)
+            total[p] += getattr(s, device)
+    return render_template("reports_usb.html", form=form, days=days, drops=drops, total=total, device=device)

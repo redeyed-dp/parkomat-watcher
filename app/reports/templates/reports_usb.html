@@ -35,13 +35,19 @@
                 <th>Всего</th>
             </tr>
             </thead>
-            {% for parkomat in drops %}
+            {% for parkomat, totaldrops in total | dictsort(true, 'value', reverse=true) %}
                 <tr>
-                    <td>{{ parkomat }}</td>
+                    <td class="text-light"> {{ parkomat }} </td>
+
                     {% for day in days %}
-                        <td>{{ drops[parkomat][day] }}</td>
+                        <td> {{ drops[parkomat][day] }} </td>
                     {% endfor %}
-                    <td>{{ drops[parkomat]['total'] }}</td>
+
+                    {% if totaldrops > 0 %}
+                        <td class="text-danger"> {{ totaldrops }} </td>
+                    {% else %}
+                        <td class="text-success"> {{ totaldrops }} </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
