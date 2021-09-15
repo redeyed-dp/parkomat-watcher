@@ -44,8 +44,8 @@ def edit(id):
 @bp.route("/delete/<int:id>")
 @login_required
 def delete(id):
-    db.session.execute(delete(Parkomat).where(Parkomat.id == id))
-    db.session.execute(delete(Health).where(Health.host == id))
+    db.session.execute(Parkomat.delete().where(Parkomat.id == id))
+    db.session.execute(Health.delete().where(Health.host == id))
     db.session.commit()
     flash(f"Паркомат { id } удален")
     return redirect(url_for("catalog.index"))
