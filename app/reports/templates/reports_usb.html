@@ -51,17 +51,17 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                {% for parkomat, totaldrops in total %}
+                {% for parkomat in total %}
                     <tr>
                         <td class="bg-dark text-light"> {{ parkomat }} </td>
                         {% for day in days %}
                             <td> {{ drops[parkomat][day] }} </td>
                         {% endfor %}
 
-                        {% if totaldrops > 0 %}
-                            <td class="text-danger"> {{ totaldrops }} </td>
+                        {% if total[parkomat] > 0 %}
+                            <td class="text-danger"> {{ total[parkomat] }} </td>
                         {% else %}
-                            <td class="text-success"> {{ totaldrops }} </td>
+                            <td class="text-success"> {{ total[parkomat] }} </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
