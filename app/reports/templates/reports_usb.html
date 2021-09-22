@@ -28,13 +28,14 @@
         <table class="table table-sm table-hover border border-dark">
             <thead class="thead-dark">
             <tr>
-                <th>Паркомат</th>
+                <th>#</th>
                 {% for day in days %}
                     <th>{{ day }}</th>
                 {% endfor %}
                 <th>Всего</th>
             </tr>
             </thead>
+            <tbody>
             {% if sortby == 'error' %}
                 {% for parkomat, totaldrops in total | dictsort(true, 'value', reverse=true) %}
                     <tr>
@@ -66,8 +67,14 @@
                     </tr>
                 {% endfor %}
             {% endif %}
+            </tbody>
         </table>
     </div>
 </div>
 
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/table_fixed.css') }}" rel="stylesheet">
 {% endblock %}

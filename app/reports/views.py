@@ -35,8 +35,16 @@ def usb(device):
         (year, month) = form.getNow()
         form.setNow()
     days = range(1, monthrange(year, month)[1] + 1)
+    if form.num.data:
+        q = form.num.data
+        if re.search(r'\d+-\d+', q):
+            (fst, lst) = q.split("-")
+            observed = [ i for i in range(int(fst), int(lst) + 1 ) ]
+        else:
+            observed = [ int(i) for i in re.findall(r'\d+', q) ]
+    else:
+        observed = Parkomat.observed_numbers()
     drops = {}
-    observed = Parkomat.observed_numbers()
     total = {}
     for p in observed:
         drops[p] = {}
