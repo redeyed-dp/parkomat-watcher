@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, SubmitField
+from wtforms import SelectField, RadioField, SubmitField
 from datetime import datetime
 
 monthes = {
@@ -20,6 +20,7 @@ monthes = {
 class MonthForm(FlaskForm):
     year = SelectField("Год", choices=['2021'], coerce=int)
     month = SelectField("Месяц", choices=[ (i, monthes[i]) for i in monthes.keys() ], coerce=int)
+    sortby = RadioField('Сортировать по', choices=[('error', 'Глючности'), ('number', 'Номеру')])
     submit = SubmitField("Показать")
 
     def getMonth(self):

@@ -23,6 +23,21 @@
     </div>
 </div>
 
+{% macro tableTr(parkomat, totaldrops) %}
+<tr>
+    <td class="bg-dark text-light"> {{ parkomat }} </td>
+    {% for day in days %}
+        <td> {{ drops[parkomat][day] }} </td>
+    {% endfor %}
+
+    {% if totaldrops > 0 %}
+        <td class="text-danger"> {{ totaldrops }} </td>
+    {% else %}
+        <td class="text-success"> {{ totaldrops }} </td>
+    {% endif %}
+</tr>
+{% endmacro %}
+
 <div class="row">
     <div class="col-12">
         <table class="table table-sm table-hover border border-dark">
@@ -35,21 +50,15 @@
                 <th>Всего</th>
             </tr>
             </thead>
-            {% for parkomat, totaldrops in total | dictsort(true, 'value', reverse=true) %}
-                <tr>
-                    <td class="bg-dark text-light"> {{ parkomat }} </td>
-
-                    {% for day in days %}
-                        <td> {{ drops[parkomat][day] }} </td>
-                    {% endfor %}
-
-                    {% if totaldrops > 0 %}
-                        <td class="text-danger"> {{ totaldrops }} </td>
-                    {% else %}
-                        <td class="text-success"> {{ totaldrops }} </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
+            {% if sortby == 'errors' %}
+                {% for parkomat, totaldrops in total | dictsort(true, 'value', reverse=true) %}
+                    {{ tableTr(parkomat, totaldrops) }}
+                {% endfor %}
+            {% else %}
+                {% for parkomat, totaldrops in total %}
+                    {{ tableTr(parkomat, totaldrops) }}
+                {% endfor %}
+            {% endif %}
         </table>
     </div>
 </div>

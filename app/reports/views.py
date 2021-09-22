@@ -48,4 +48,4 @@ def usb(device):
         for s in stat:
             drops[p][s.date.day] = getattr(s, device)
             total[p] += getattr(s, device)
-    return render_template("reports_usb.html", form=form, days=days, drops=drops, total=total, device=device)
+    return render_template("reports_usb.html", form=form, days=days, drops=drops, total=total, device=device, sortby=form.sortby.data)
