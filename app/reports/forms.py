@@ -20,7 +20,7 @@ monthes = {
 class MonthForm(FlaskForm):
     year = SelectField("Год", choices=['2021'], coerce=int)
     month = SelectField("Месяц", choices=[ (i, monthes[i]) for i in monthes.keys() ], coerce=int)
-    sortby = RadioField('Сортировать по', choices=[('error', 'Глючности'), ('number', 'Номеру')])
+    sortby = RadioField('Сортировать по', choices=[('error', 'Глючности'), ('number', 'Номеру')], default='error')
     submit = SubmitField("Показать")
 
     def getMonth(self):
