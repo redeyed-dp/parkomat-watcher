@@ -148,8 +148,8 @@ def evening_report(name):
     pdf.cell(w, h, "Паркомат №", 1, 0, 'C')
     pdf.cell(w, h, "Монетник", 1, 0, 'C')
     pdf.cell(w, h, "Купюрник", 1, 0, 'C')
-    pdf.cell(w, h, "Принтер", 1, 0, 'C')
     pdf.cell(w, h, "NFC Exellio", 1, 0, 'C')
+    pdf.cell(w, h, "Принтер", 1, 0, 'C')
     pdf.cell(w, h, "Перезагрузки", 1, 0, 'C')
     pdf.ln(h)
     for p in usb.keys():
